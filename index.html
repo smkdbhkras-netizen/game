@@ -192,6 +192,33 @@ body{min-height:100vh;min-height:100dvh}
 #ls .cs{font-weight:800;letter-spacing:3px;text-shadow:0 2px 6px #000}
 .opt.chosen{border-color:var(--c1);background:#12306a}.opt.chosen:disabled{opacity:1}.opt.chosen:after{content:" ⏳"}
 @media(max-height:420px){#ls{gap:6px}#ls .tp{display:none}#ls .vs{min-height:48px}#ls h1{font-size:18px}}
+
+/* ===== HUD v2: layout meniru MOBA mobile (minimap + panel samping, gold kanan atas, shop tengah bawah) ===== */
+#side{position:absolute;left:calc(10px + min(176px,26vw));top:8px;width:40px;display:flex;flex-direction:column;background:linear-gradient(#1c2745f0,#0b1325f0);border:2px solid #5fb4ff;border-left:0;border-radius:0 9px 9px 0;overflow:hidden;z-index:3;box-shadow:0 2px 8px #000a}
+#side #net{position:static;background:none;border-radius:0;padding:4px 1px;color:#7dffa8;font-size:9px;line-height:1.15;text-align:center;white-space:normal;pointer-events:none}
+#side #net b{display:block;font-size:12px}
+#side #snd,#side #fsb,#side #ff{width:100%;height:30px;border:0;border-top:1px solid #ffffff26;border-radius:0;background:transparent;font-size:15px;color:#fff;cursor:pointer;padding:0}
+#side button:active{background:#ffffff22}
+#gold{display:flex;align-items:center;justify-content:flex-end;gap:8px;min-width:104px;padding:2px 12px 2px 4px;background:linear-gradient(#2d3248f2,#12141f);border:2px solid #7d8bb0;border-radius:6px;box-shadow:0 2px 8px #000a}
+#gold s{text-decoration:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:15px;color:#5a3200;background:radial-gradient(circle at 35% 30%,#ffe98a,#d98a00);border:2px solid #fff3b0}
+#gold b{font-size:20px;font-weight:700;color:#fff;text-shadow:0 1px 3px #000;font-variant-numeric:tabular-nums}
+#spl{position:absolute;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:14px;align-items:flex-end;z-index:3;pointer-events:none}
+#spl .sp{display:flex;flex-direction:column;align-items:center;gap:2px}
+#spl small{font-size:11px;font-weight:700;color:#fff;text-shadow:0 1px 3px #000,0 0 4px #000}
+#gs{pointer-events:auto;width:54px;height:54px;padding:0;border-radius:50%;font-size:24px;color:#fff;border:3px solid #d8a85a;background:radial-gradient(circle at 35% 30%,#8a5424,#2a1408 75%);box-shadow:inset 0 0 10px #000b,0 3px 8px #000b}
+#gs:active{transform:scale(.93)}
+#kb,#kr{min-width:44px!important;font-size:18px!important}
+#tm{background:#05080ff5!important;letter-spacing:1px}
+#joy{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><g fill='%23ffffff99'><path d='M50 5l6 8H44z'/><path d='M50 95l6-8H44z'/><path d='M5 50l8-6v12z'/><path d='M95 50l-8-6v12z'/></g></svg>"),radial-gradient(circle,#0a102466 0,#0a102440 58%,#ffffff26 100%);border:3px solid #ffffff70;box-shadow:inset 0 0 30px #000b,0 0 10px #0008}
+#joy:after{display:none}
+#knob{background:radial-gradient(circle at 35% 28%,#c3c0ff,#5a52f0 55%,#27228c);border:3px solid #a29eff;box-shadow:0 0 16px #6a63ff,inset 0 -6px 10px #0007}
+#knob:after{content:"";position:absolute;inset:14px;border-radius:50%;border:2px solid #ffffff90}
+.ab{border:4px solid #8aa3cf;background:radial-gradient(circle at 40% 30%,#164a8a,#06122b 70%);box-shadow:0 0 0 2px #050914,0 4px 12px #000c,inset 0 0 14px #000c}
+#bA{background:radial-gradient(circle at 40% 30%,#6a93f0,#14285e 72%);border-color:#c7dcff;box-shadow:0 0 0 2px #050914,0 0 18px #3b9eff99,inset 0 0 14px #000a}
+#b3{border-color:#ffd24a}
+#evc{top:calc(8px + min(176px,26vw)*.5625 + 10px)}#bf{top:calc(8px + min(176px,26vw)*.5625 + 34px)}
+@media(max-height:480px){#side{width:34px}#gold{min-width:84px}#gold b{font-size:17px}#gs{width:46px;height:46px;font-size:20px}#spl{bottom:calc(10px + env(safe-area-inset-bottom))}}
+@media(max-width:700px){#side{width:34px}}
 </style></head><body>
 <div id="app"></div><div id="arena" class="hidden"></div><div id="modal" class="modal hidden"></div><div id="toast"></div><nav id="nav"></nav><div id="ld"><div class="lc"><div class="spin"></div><b id="ldt"></b><small id="lds"></small></div></div><div id="ldm"></div><div id="ls"></div>
 <script>
@@ -463,8 +490,8 @@ function mk(u,team,i){const h=H(u.id),ro=ROLE[h.role]||ROLE.Attack,sp=team?[[RX-
 function rtInit(r){
   const a=$('#arena');a.classList.remove('hidden');$('#nav').style.display='none';mobFS(1);
   const ph=(l,sel)=>l.map((u,i)=>`<div class="p" ${sel?`onclick="rtSw(${i})"`:''}><b>${u.lv}</b>${hImg(u.id,'height:28px;display:block;margin:auto')}<i></i></div>`).join('');
-  a.innerHTML=`<canvas id="cv"></canvas><div id="jz"></div><div id="vig"></div><div id="dead"><b>💀 HERO-MU GUGUR</b><small>Respawn dalam</small><span id="dt"></span></div><div id="qa" class="hidden"></div><div id="cb" class="hidden"></div><div id="ann" class="hidden"></div><div id="evc" class="hidden"></div><div id="bf"></div><div id="net">⚡ <b id="fps">60</b> FPS</div><div id="rot"><div class="rph">📱</div><b>Putar HP ke mode LANDSCAPE</b><small>Game solo berhenti sementara</small><button class="btn m" style="width:auto;padding:8px 18px" onclick="RT.rd=1;this.parentNode.classList.add('off')">Tetap main portrait</button></div><div id="qc"><button onclick="$('#qcl').style.display=$('#qcl').style.display==='flex'?'none':'flex'">💬</button><div id="qcl">${QC.map((t,k)=>`<button onclick="qcSend(${k})">${t}</button>`).join('')}</div></div><div id="top"><div id="prs"><div class="pr" id="pa">${ph(r.mine,0)}</div><div class="pr" id="pe">${ph(r.foe,0)}</div></div><div id="sb"><span id="kb">0</span><span id="tm">3:00</span><span id="kr">0</span></div></div>
-  <div id="gb"><div id="gt"><button id="snd" onclick="sfxToggle()">${SFX.on?'🔊':'🔇'}</button>${document.documentElement.requestFullscreen?'<button id="fsb" onclick="mobFS()">⛶</button>':''}<button id="ff" onclick="rtFF()">🏳</button><button id="gs" onclick="shopOpen()">🛒 <b id="gg">500</b></button></div><div id="gi"></div></div><div id="joy"><i id="knob"></i></div><button id="bA" class="ab">🗡</button>
+  a.innerHTML=`<canvas id="cv"></canvas><div id="jz"></div><div id="vig"></div><div id="dead"><b>💀 HERO-MU GUGUR</b><small>Respawn dalam</small><span id="dt"></span></div><div id="qa" class="hidden"></div><div id="cb" class="hidden"></div><div id="ann" class="hidden"></div><div id="evc" class="hidden"></div><div id="bf"></div><div id="rot"><div class="rph">📱</div><b>Putar HP ke mode LANDSCAPE</b><small>Game solo berhenti sementara</small><button class="btn m" style="width:auto;padding:8px 18px" onclick="RT.rd=1;this.parentNode.classList.add('off')">Tetap main portrait</button></div><div id="qc"><button onclick="$('#qcl').style.display=$('#qcl').style.display==='flex'?'none':'flex'">💬</button><div id="qcl">${QC.map((t,k)=>`<button onclick="qcSend(${k})">${t}</button>`).join('')}</div></div><div id="top"><div id="prs"><div class="pr" id="pa">${ph(r.mine,0)}</div><div class="pr" id="pe">${ph(r.foe,0)}</div></div><div id="sb"><span id="kb">0</span><span id="tm">3:00</span><span id="kr">0</span></div></div>
+  <div id="side"><div id="net">⚡ <b id="fps">60</b> FPS</div><button id="snd" onclick="sfxToggle()">${SFX.on?'🔊':'🔇'}</button>${document.documentElement.requestFullscreen?'<button id="fsb" onclick="mobFS()">⛶</button>':''}<button id="ff" onclick="rtFF()">🏳</button></div><div id="gb"><div id="gold"><s>$</s><b id="gg">500</b></div><div id="gi"></div></div><div id="spl"><div class="sp"><button id="gs" onclick="shopOpen()">🛒</button><small>Shop</small></div></div><div id="joy"><i id="knob"></i></div><button id="bA" class="ab">🗡</button>
   ${[1,2,3].map(i=>`<button id="b${i}" class="ab"><div class="nn" id="n${i}"></div><em id="c${i}"></em></button>`).join('')}`;
   const dec=[];for(let i=0;i<520;i++)dec.push([Math.random()*W,Math.random()*HW,14+Math.random()*60]);
   const gr=[];for(let i=0;i<2300;i++)gr.push([Math.random()*W,Math.random()*HW,6+Math.random()*9]);
@@ -934,7 +961,7 @@ function rtDraw(){const x=RT.ctx,w=RT.cw,h=RT.ch,u=cu(),s=h/VIEW_H,vw=w/s,vh=h/s
   x.lineJoin='round';const road=(c,wd,cap,dash)=>{x.strokeStyle=c;x.lineWidth=wd;x.lineCap=cap;x.setLineDash(dash||[]);LN.forEach(p=>{x.beginPath();p.forEach((q,i)=>i?x.lineTo(q[0],q[1]):x.moveTo(q[0],q[1]));x.stroke()})};
   road('#3a3322',128,'round');road('#8f8a6c',110,'round');road('#a8a283',92,'round');road('#00000026',100,'butt',[3,38]);road('#ffffff14',4,'round',[14,26]);x.setLineDash([]);x.lineCap='round';
   RT.cr.forEach(c=>{x.fillStyle=c.t?'#ff2bd620':'#00e5ff20';x.beginPath();x.arc(c.x,c.y,170,0,7);x.fill()});
-  x.strokeStyle='#00e5ff88';x.lineWidth=4;x.strokeRect(0,0,W,HW);
+  x.save();x.lineJoin='miter';x.strokeStyle='#23232b';x.lineWidth=48;x.strokeRect(0,0,W,HW);x.strokeStyle='#707589';x.lineWidth=36;x.strokeRect(0,0,W,HW);x.strokeStyle='#a3a9bf';x.lineWidth=6;x.strokeRect(-13,-13,W+26,HW+26);x.setLineDash([26,30]);x.lineCap='butt';x.strokeStyle='#00000045';x.lineWidth=36;x.strokeRect(0,0,W,HW);x.restore();
   const it=[];OBS.forEach(o=>{if(vis(o[0],o[1],o[2]+90))it.push([o[1],()=>drawObs(x,o)])});RT.cr.forEach(c=>{if(c.hp>0&&vis(c.x,c.y,320))it.push([c.y,()=>drawCr(x,c)])});RT.tw.forEach(w=>{if(w.hp>0&&vis(w.x,w.y,320))it.push([w.y,()=>drawTw(x,w)])});RT.mn.forEach(m=>{if(!m.dead&&vis(m.x,m.y,70))it.push([m.y,()=>drawMn(x,m)])});RT.jg.forEach(m=>{if(!m.dead&&vis(m.x,m.y,120))it.push([m.y,()=>drawJg(x,m)])});RT.units.forEach(n=>{if(!n.dead&&(vis(n.x,n.y,140)||n===cu()))it.push([n.y,()=>drawU(x,n)])});
   it.sort((a,b)=>a[0]-b[0]).forEach(i=>i[1]());
   if(RT.aim&&!cu().dead){const u=cu(),k=u.kinds[RT.aim.i-1],a=RT.aim.a,L=k==='dash'?170:520;x.save();x.globalAlpha=.55;x.strokeStyle='#ffd24a';x.fillStyle='#ffd24a';
@@ -1054,7 +1081,7 @@ function drawU(x,u){x.fillStyle='#0006';x.beginPath();x.ellipse(u.x,u.y+18,20,8,
     x.fillStyle='#000d';x.fillRect(bx-1,by-1,bw+2,11);x.fillStyle='#1a2236';x.fillRect(bx,by,bw,6);x.fillStyle=tc;x.fillRect(bx,by,bw*f,6);
     x.fillStyle='#ffffff40';x.fillRect(bx,by,bw*f,2);x.fillStyle='#000a';for(let k=1;k<6;k++)x.fillRect(bx+bw*k/6-.5,by,1,6);
     x.fillStyle='#0b1636';x.fillRect(bx,by+7,bw,2);x.fillStyle=uf>=1?'#ffd24a':'#4aa8ff';x.fillRect(bx,by+7,bw*uf,2);
-    x.fillStyle='#0b1636';x.strokeStyle=tc;x.lineWidth=2;x.beginPath();x.arc(bx-9,by+4,9,0,7);x.fill();x.stroke();
+    x.fillStyle='#05080f';x.strokeStyle='#e8c24a';x.lineWidth=2.2;x.beginPath();x.arc(bx-9,by+4,9,0,7);x.fill();x.stroke();
     x.fillStyle='#fff';x.font='bold 11px system-ui';x.fillText(u.lv,bx-9,by+8);
     x.font='bold 11px system-ui';x.lineWidth=3;x.strokeStyle='#000c';x.strokeText(u.name,u.x+6,by-5);x.fillStyle=me?'#ffd24a':u.team?'#ffb3c4':'#d6f3ff';x.fillText(u.name,u.x+6,by-5)}
   if(me){x.fillStyle='#ffd24a';x.beginPath();x.moveTo(u.x+6,u.y-60);x.lineTo(u.x-1,u.y-72);x.lineTo(u.x+13,u.y-72);x.fill()}}
