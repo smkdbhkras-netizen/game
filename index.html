@@ -895,15 +895,22 @@ const mpErrTxt=e=>e.type==='badkey'?'Kunci Ably salah/tidak aktif. Cek MP_ABLY d
 function mpFail(msg){if(MP.role!=='guest'||RT.on||(MP.conn&&MP.conn.open))return;toast(msg);closeM();mpReset()}
 // tes jaringan: cek server perantara, STUN, dan TURN
 async function mpTest(){mod('<h3>🔧 Menguji jaringan...</h3><p class="mut">Tunggu ±15 detik</p>');
-  if(MP_ABLY){let s1=0,s2=0,rtt=-1,err='',st='-';
-    try{await mpLoad();s1=1;const rt=new Ably.Realtime({key:MP_ABLY,clientId:'t'+Math.random().toString(36).slice(2,6)});
-      rt.connection.on(c=>{if(c.reason)err=(c.reason.message||'')+' ['+c.reason.code+']'});
+  if(MP_ABLY){let s1=0,s2=0,rtt=-1,pr=-1,err='',rerr='',perr='',st='-';
+    const E=e=>e?((e.message||String(e))+(e.code?' ['+e.code+']':'')):'',R=Math.random().toString(36).slice(2,6),cid='t'+R;
+    try{await mpLoad();s1=1;const rt=new Ably.Realtime({key:MP_ABLY,clientId:cid});
+      rt.connection.on(c=>{if(c.reason)err=E(c.reason)});
       s2=await new Promise(res=>{const tm=setTimeout(()=>res(0),12000);rt.connection.once('connected',()=>{clearTimeout(tm);res(1)});rt.connection.once('failed',()=>{clearTimeout(tm);res(0)})});
-      if(s2){const ch=rt.channels.get('cv-test');rtt=await new Promise(res=>{const tm=setTimeout(()=>res(-1),6000);let t1=0;
-        ch.subscribe('p',()=>{clearTimeout(tm);res(Math.round(performance.now()-t1))}).then(()=>{t1=performance.now();return ch.publish('p',1)}).catch(()=>res(-1))})}
-      st=rt.connection.state;rt.close()}catch(e){err=String(e&&e.message||e)}
-    const ok=x=>x?'✅':'❌',k401=/\[401\d\d\]/.test(err);
-    return mod(`<h3>🔧 HASIL TES JARINGAN</h3><div style="text-align:left;line-height:1.9;margin:8px 0">${ok(s1)} Modul Ably termuat<br>${ok(s2)} Tersambung ke server Ably <small class="mut">(${st})</small><br>${ok(rtt>=0)} Kirim-terima pesan ${rtt>=0?'<small class="mut">('+rtt+' ms)</small>':''}</div>${err?'<small class="mut" style="word-break:break-word">'+esc(err)+'</small>':''}<p class="mut">${!s1?'Modul Ably tidak bisa dimuat (cdn.ably.com & jsdelivr diblokir atau dibatasi). Coba data seluler/hotspot.':k401?'Kunci Ably ditolak. Cek isi MP_ABLY di kode.':!s2?'Tidak bisa tersambung ke server Ably: jaringan ini memblokirnya. Coba data seluler/hotspot.':rtt<0?'Tersambung tapi pesan tidak sampai. Cek izin (capability) kunci di dashboard Ably.':rtt<300?'Koneksi bagus untuk mabar jarak jauh. 👍':'Terhubung tapi agak lambat. Mabar tetap bisa, mungkin terasa delay.'}</p><button class="btn" onclick="closeM()">OK</button>`)}
+      if(s2){const ch=rt.channels.get('cv-test-'+R);
+        // data HARUS objek/teks: angka polos ditolak Ably (40013) -> dulu tes selalu gagal padahal kunci benar
+        rtt=await new Promise(res=>{const tm=setTimeout(()=>{rerr=rerr||'tidak ada balasan dalam 6 detik';res(-1)},6000);let t1=0;
+          ch.subscribe('p',()=>{clearTimeout(tm);res(Math.round(performance.now()-t1))}).then(()=>{t1=performance.now();return ch.publish('p',{ping:1})}).catch(e=>{clearTimeout(tm);rerr=E(e);res(-1)})});
+        // izin presence: dipakai untuk membuat & menggabung room mabar
+        try{await ch.presence.enter();const m=await ch.presence.get();pr=m.some(p=>p.clientId===cid)?1:0;try{await ch.presence.leave()}catch(x){}}catch(e){pr=-1;perr=E(e)}}
+      st=rt.connection.state;rt.close()}catch(e){err=E(e)}
+    const ok=x=>x?'✅':'❌',k401=/\[401\d\d\]/.test(err),den=/40160|40161|40162|denied|capabilit/i;
+    const hint=!s1?'Modul Ably tidak bisa dimuat (cdn.ably.com & jsdelivr diblokir atau dibatasi). Coba data seluler/hotspot.':k401?'Kunci Ably ditolak. Cek isi MP_ABLY di kode.':!s2?'Tidak bisa tersambung ke server Ably: jaringan ini memblokirnya. Coba data seluler/hotspot.':rtt<0?(den.test(rerr)?'Kunci tidak punya izin publish/subscribe untuk channel cv-*. Di dashboard Ably, edit kunci: centang Publish, Subscribe, Presence dan resource cv-*.':'Pesan tidak sampai ('+(rerr||'sebab tidak diketahui')+'). Coba jalankan ulang tes atau pindah jaringan.'):pr<0?(den.test(perr)?'Izin PRESENCE belum aktif di kunci. Edit kunci di dashboard Ably dan centang Presence.':'Presence gagal ('+(perr||'sebab tidak diketahui')+'). Room mabar mungkin tidak bisa dibuat.'):pr===0?'Presence tersambung tapi tidak terbaca. Coba ulangi tes.':rtt<300?'Koneksi bagus untuk mabar jarak jauh. 👍':'Terhubung tapi agak lambat. Mabar tetap bisa, mungkin terasa delay.';
+    const det=[err,rerr,perr].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' | ');
+    return mod(`<h3>🔧 HASIL TES JARINGAN</h3><div style="text-align:left;line-height:1.9;margin:8px 0">${ok(s1)} Modul Ably termuat<br>${ok(s2)} Tersambung ke server Ably <small class="mut">(${st})</small><br>${ok(rtt>=0)} Kirim-terima pesan ${rtt>=0?'<small class="mut">('+rtt+' ms)</small>':''}<br>${ok(pr===1)} Izin room (presence)</div>${det?'<small class="mut" style="word-break:break-word">'+esc(det)+'</small>':''}<p class="mut">${hint}</p><button class="btn" onclick="closeM()">OK</button>`)}
   if(MP_RELAY){const t0=performance.now(),ms=await new Promise(r=>{try{const w=new WebSocket(MP_RELAY.replace(/\/$/,'')+'/r/TEST1?role=guest'),t=setTimeout(()=>{try{w.close()}catch(e){}r(-1)},6000);
       w.onmessage=()=>{clearTimeout(t);try{w.close()}catch(e){}r(Math.round(performance.now()-t0))};w.onerror=()=>{clearTimeout(t);r(-1)}}catch(e){r(-1)}});
     return mod(`<h3>🔧 HASIL TES JARINGAN</h3><div style="text-align:left;line-height:1.9;margin:8px 0">${ms>=0?'✅':'❌'} Server relay online ${ms>=0?'<small class="mut">('+ms+' ms)</small>':''}</div><p class="mut">${ms<0?'Server relay tidak terjangkau. Cek alamat MP_RELAY atau pindah jaringan.':ms<250?'Koneksi bagus untuk mabar jarak jauh. 👍':'Terhubung tapi agak lambat. Mabar tetap bisa, mungkin terasa delay.'}</p><button class="btn" onclick="closeM()">OK</button>`)}
