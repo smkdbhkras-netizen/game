@@ -553,7 +553,7 @@ function nearest(u,list,max){let b=null,d=max;list.forEach(x=>{const k=dist(u,x)
 function battleV(){const own=S.d.heroes.filter(h=>S.d.owned[h.heroId]);
   return `<div class="card"><h3>⚔️ 3 VS 3 ARENA</h3><p class="mut">Setelah memilih mode, kamu masuk <b>layar Pilih Hero</b> untuk menentukan hero yang kamu mainkan. 2 teman satu tim dikendalikan AI. Kalau hero-mu mati, tunggu respawn. Gerakkan hero sendiri dengan joystick, serang musuh, push 3 lane (atas, tengah, bawah), hancurkan turret lalu crystal lawan. <b>Skill 1 & 2</b> = Quick Answer: jawab soal singkat (3 pilihan) tanpa menghentikan game, benar = skill penuh, salah/waktu habis = skill tetap keluar tapi lemah (60%). <b>Ultimate</b> = soal penuh, game berhenti sebentar. Soal yang salah dibahas di <b>REVIEW</b> akhir match (bonus XP). Jawab benar berturut-turut = <b>COMBO 🔥</b> (damage naik, cooldown turun). Soal yang salah akan muncul lagi sebagai <b>🔁 ULANGAN</b> di match berikutnya sampai kamu menguasainya. <b>Geser tombol skill ke arah musuh untuk membidik</b>, lepas untuk mengaktifkan (tap saja = bidik otomatis). Last-hit minion & kill musuh untuk dapat gold, beli item lewat tombol 🛒. Putar HP ke <b>landscape</b> untuk pengalaman terbaik.</p>
   <div class="card" style="display:flex;align-items:center;gap:12px;margin:10px 0"><div style="min-width:70px;text-align:center">${S.team[0]&&S.d.owned[S.team[0]]?hImg(S.team[0],'height:70px'):'<span style="font-size:40px">❓</span>'}</div><div style="flex:1;text-align:left"><small class="mut">HERO KAMU</small><br><b>${S.team[0]&&S.d.owned[S.team[0]]?H(S.team[0]).name:'Otomatis (terkuat)'}</b></div><button class="btn m" style="width:auto;padding:8px 14px" onclick="selGo(null)">🎯 PILIH HERO</button></div>
-  <button class="btn m" style="margin-bottom:8px" onclick="subM()">📚 MAPEL SOAL · ${(S.d.subjects||SUBJ).length} dari 9 aktif</button>
+  <button class="btn m" style="margin-bottom:8px" onclick="subM()">📚 MAPEL SOAL · ${(S.d.subjects||SUBJ).length} dari 9 aktif</button> <button class="btn m" style="margin:0 0 8px 6px" onclick="mpTest()">🔧 TES JARINGAN MABAR</button>
   <div class="row"><button class="btn" onclick="selGo('ai')">🤖 VS AI<br><small style="color:#012">Latihan · menang +10 RP</small></button><button class="btn m" onclick="selGo('pvp')">🌐 RANKED PvP<br><small style="color:#fde">+25 / -15 RP</small></button></div>
   <div class="row" style="margin-top:8px"><button class="btn" onclick="selGo('host')">👥 MABAR<br><small style="color:#012">Buat room · ajak 2 teman</small></button><button class="btn m" onclick="selGo('join')">🔑 GABUNG<br><small style="color:#fde">Masukkan kode room</small></button></div></div>`}
 // ===================== LAYAR PILIH HERO (sebelum main) =====================
@@ -807,29 +807,131 @@ function rvDone(){mod(`<div class="big">📖</div><h2>REVIEW SELESAI</h2><p>${RV
 // Host menjalankan seluruh simulasi game; teman (guest) mengirim input & skill, menerima snapshot ~12x/detik.
 // Soal, XP, Coin, Combo, REVIEW & ULANGAN tetap per-pemain lewat server masing-masing.
 const MP={conns:[],peer:null,conn:null,code:'',role:null,ready:{},starting:0,names:[],gr:null};
-function mpLoad(){return new Promise((res,rej)=>{if(window.Peer)return res();const U=['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'];let i=0;
-  const nx=()=>{if(i>=U.length)return rej();const s=document.createElement('script');s.src=U[i++];s.onload=()=>window.Peer?res():nx();s.onerror=nx;document.head.appendChild(s)};nx()})}
+// ===== ONLINE TANPA RIBET: Ably (gratis, cukup 1 kunci) =====
+// Daftar di ably.com -> Create new app -> API Keys -> salin kunci ke sini. Contoh: 'abc123.xyz789:AbCdEfGh...'
+const MP_ABLY='mkTw-Q.mSAwaA:Ws6RCFo-pEEQaaHStp4z1A9jP56DC-eKJmN9qGfGi6A';
+class AblyPeer{ // meniru API PeerJS yang dipakai kode mabar
+  constructor(id){this.h={};this.conns=new Map();this.dead=false;this.gc=null;this.host=!!id;
+    this.code=id?id.replace('cvmabar-',''):null;this.gid=id?'host':'g'+Math.random().toString(36).slice(2,8);
+    try{this.rt=new Ably.Realtime({key:MP_ABLY,clientId:this.gid,echoMessages:false});
+      this.rt.connection.on('failed',()=>{const c=this.rt.connection.errorReason&&this.rt.connection.errorReason.code;this.err(c>=40100&&c<40200?'badkey':'network')})}
+    catch(e){return setTimeout(()=>this.err('network'),0)}
+    if(id)this._host();else setTimeout(()=>this.emit('open',null),0)}
+  on(e,f){(this.h[e]=this.h[e]||[]).push(f)}
+  emit(e,a){(this.h[e]||[]).slice().forEach(f=>{try{f(a)}catch(x){console.error(x)}})}
+  err(t){if(!this.dead)this.emit('error',{type:t})}
+  ch(n){return this.rt.channels.get('cv-'+this.code+'-'+n)}
+  _pub(o){try{Promise.resolve(this.H.publish('m',o)).catch(()=>{})}catch(e){}}
+  _gpub(o){try{Promise.resolve(this.G.publish('m',o)).catch(()=>{})}catch(e){}}
+  bcast(m){this._pub({to:'*',m:m})}
+  async _host(){try{this.H=this.ch('h');this.G=this.ch('g');
+    const pr=await this.H.presence.get();if(pr.some(p=>p.clientId==='host'))return this.err('unavailable-id');
+    await this.H.presence.enter();
+    await this.G.subscribe('m',msg=>this._hm(msg.data));
+    await this.G.presence.subscribe('leave',p=>this._left(p.clientId));
+    this.emit('open',null)}catch(e){this.err('network')}}
+  _hm(d){if(!d)return;const g=d.g;
+    if(d.t==='join'){if(this.conns.has(g)){this._pub({to:g,t:'ready'});return}
+      const c=new RelayConn(g);c.open=true;c.send=m=>this._pub({to:g,m:m});
+      c.close=()=>{if(!c.open)return;c.open=false;this._pub({to:g,ctl:'kick'});this.conns.delete(g)};
+      this.conns.set(g,c);this._pub({to:g,t:'ready'});this.emit('connection',c)}
+    else if(d.t==='d'){const c=this.conns.get(g);if(c)c.emit('data',d.m)}}
+  _left(g){const c=this.conns.get(g);if(c){this.conns.delete(g);if(c.open){c.open=false;c.emit('close')}}}
+  connect(id){this.code=id.replace('cvmabar-','');const c=new RelayConn(id);this.gc=c;this._guest(c);
+    c.send=m=>this._gpub({g:this.gid,t:'d',m:m});c.close=()=>this.destroy();return c}
+  async _guest(c){try{this.H=this.ch('h');this.G=this.ch('g');
+    const pr=await this.H.presence.get();if(!pr.some(p=>p.clientId==='host'))return this.err('peer-unavailable');
+    await this.H.subscribe('m',msg=>this._gm(msg.data));
+    await this.H.presence.subscribe('leave',p=>{if(p.clientId==='host'&&c.open){c.open=false;c.emit('close')}});
+    await this.G.presence.enter();this._gpub({g:this.gid,t:'join'})}catch(e){this.err('network')}}
+  _gm(d){if(!d||(d.to!=='*'&&d.to!==this.gid))return;const c=this.gc;if(!c)return;
+    if(d.t==='ready'){if(!c.open){c.open=true;c.emit('open')}}
+    else if(d.ctl==='kick'){c.open=false;c.emit('close');this.destroy()}
+    else if('m' in d)c.emit('data',d.m)}
+  destroy(){if(this.dead)return;this.dead=true;try{(this.host?this.H:this.G).presence.leave()}catch(e){}setTimeout(()=>{try{this.rt.close()}catch(e){}},300)}}
+// ===== MODE ONLINE JARAK JAUH: relay WebSocket (Cloudflare) menggantikan P2P =====
+// Isi dengan alamat Worker kamu setelah deploy, contoh: 'wss://cv-relay.namakamu.workers.dev'. Kosong = pakai P2P PeerJS.
+const MP_RELAY='';
+class RelayConn{constructor(id){this.peer=id;this.open=false;this.h={}}
+  on(e,f){(this.h[e]=this.h[e]||[]).push(f)}
+  emit(e,a){(this.h[e]||[]).slice().forEach(f=>{try{f(a)}catch(x){console.error(x)}})}}
+class RelayPeer{ // meniru API PeerJS yang dipakai kode mabar: on/connect/destroy, conn.send/close/on/peer/open
+  constructor(id){this.h={};this.conns=new Map();this.ws=null;this.dead=false;this.role=id?'host':'guest';this.gc=null;
+    if(id)this._ws(id.replace('cvmabar-',''),'host');else setTimeout(()=>this.emit('open',null),0)}
+  on(e,f){(this.h[e]=this.h[e]||[]).push(f)}
+  emit(e,a){(this.h[e]||[]).slice().forEach(f=>{try{f(a)}catch(x){console.error(x)}})}
+  _ws(code,role){const ws=new WebSocket(MP_RELAY.replace(/\/$/,'')+'/r/'+code+'?role='+role);this.ws=ws;
+    ws.onopen=()=>{this._hb=setInterval(()=>{try{ws.send('{"t":"hb"}')}catch(e){}},25000)};
+    ws.onerror=()=>{if(!this.dead)this.emit('error',{type:'network'})};
+    ws.onclose=()=>{clearInterval(this._hb);if(this.dead)return;this.conns.forEach(c=>{if(c.open){c.open=false;c.emit('close')}});if(this.gc&&this.gc.open){this.gc.open=false;this.gc.emit('close')}};
+    ws.onmessage=ev=>{let d;try{d=JSON.parse(ev.data)}catch(e){return}this._msg(d)}}
+  _msg(d){
+    if(d.t==='open')this.emit('open',null);
+    else if(d.t==='err')this.emit('error',{type:d.e});
+    else if(d.t==='join'){const g=d.g,c=new RelayConn(g);c.open=true;
+      c.send=m=>{try{this.ws.send(JSON.stringify({to:g,m:m}))}catch(e){}};
+      c.close=()=>{if(!c.open)return;c.open=false;try{this.ws.send(JSON.stringify({to:g,ctl:'kick'}))}catch(e){}};
+      this.conns.set(g,c);this.emit('connection',c)}
+    else if(d.t==='from'){const c=this.conns.get(d.g);if(c)c.emit('data',d.m)}
+    else if(d.t==='left'){const c=this.conns.get(d.g);if(c){this.conns.delete(d.g);if(c.open){c.open=false;c.emit('close')}}}
+    else if(d.t==='ready'){if(this.gc){this.gc.open=true;this.gc.emit('open')}}
+    else if(d.t==='hostleft'){if(this.gc&&this.gc.open){this.gc.open=false;this.gc.emit('close')}}
+    else if('m' in d){if(this.gc)this.gc.emit('data',d.m)}}
+  connect(id){const c=new RelayConn(id);this.gc=c;this._ws(id.replace('cvmabar-',''),'guest');
+    c.send=m=>{try{if(this.ws.readyState===1)this.ws.send(JSON.stringify({m:m}))}catch(e){}};
+    c.close=()=>{try{this.ws.close()}catch(e){}};return c}
+  destroy(){this.dead=true;clearInterval(this._hb);try{this.ws&&this.ws.close()}catch(e){}}}
+function mpPeer(id){if(MP_ABLY)return new AblyPeer(id);if(MP_RELAY)return new RelayPeer(id);return id?new Peer(id,MP.cfg):new Peer(MP.cfg)}
+// ---- Konfigurasi jaringan: STUN + TURN (relay) agar bisa tembus WiFi sekolah / CGNAT seluler ----
+// Untuk TURN yang STABIL: daftar gratis di metered.ca -> menu TURN -> salin nama app & API key ke MP_TURN di bawah.
+const MP_TURN={app:'',key:''}; // contoh: {app:'smkku',key:'abc123...'}
+const MP_ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun.cloudflare.com:3478'},{urls:'stun:global.stun.twilio.com:3478'},
+ {urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'},
+ {urls:'turns:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}];
+async function mpCfg(){let ice=MP_ICE;
+  if(MP_TURN.app&&MP_TURN.key){try{const r=await fetch('https://'+MP_TURN.app+'.metered.live/api/v1/turn/credentials?apiKey='+MP_TURN.key);if(r.ok){const j=await r.json();if(Array.isArray(j)&&j.length)ice=MP_ICE.slice(0,3).concat(j)}}catch(e){}}
+  return {debug:0,config:{iceServers:ice,iceCandidatePoolSize:4}}}
+const mpErrTxt=e=>e.type==='badkey'?'Kunci Ably salah/tidak aktif. Cek MP_ABLY di kode.':e.type==='full'?'Room penuh.':e.type==='peer-unavailable'?'Room tidak ditemukan. Cek kodenya.':['network','server-error','socket-error','socket-closed'].includes(e.type)?'Server perantara mabar diblokir/tidak terjangkau di jaringan ini. Coba data seluler atau hotspot.':'Mabar error: '+e.type;
+function mpFail(msg){if(MP.role!=='guest'||RT.on||(MP.conn&&MP.conn.open))return;toast(msg);closeM();mpReset()}
+// tes jaringan: cek server perantara, STUN, dan TURN
+async function mpTest(){mod('<h3>🔧 Menguji jaringan...</h3><p class="mut">Tunggu ±8 detik</p>');
+  if(MP_ABLY){let rtt=-1,bad=0;try{await mpLoad();const rt=new Ably.Realtime({key:MP_ABLY,clientId:'t'+Math.random().toString(36).slice(2,6)});
+      rt.connection.on('failed',()=>{bad=1});const ch=rt.channels.get('cv-test');
+      rtt=await new Promise(res=>{const tm=setTimeout(()=>res(-1),8000);let t1=0;ch.subscribe('p',()=>{clearTimeout(tm);res(Math.round(performance.now()-t1))}).then(()=>{t1=performance.now();return ch.publish('p',1)}).catch(()=>res(-1))});rt.close()}catch(e){}
+    return mod(`<h3>🔧 HASIL TES JARINGAN</h3><div style="text-align:left;line-height:1.9;margin:8px 0">${rtt>=0?'✅':'❌'} Server online Ably ${rtt>=0?'<small class="mut">(bolak-balik '+rtt+' ms)</small>':''}</div><p class="mut">${rtt<0?(bad?'Kunci Ably salah/tidak aktif. Cek MP_ABLY di kode.':MP_ABLY.indexOf(':')<0?'Isi MP_ABLY dengan kunci lengkap dari ably.com.':'Server tidak terjangkau. Pindah jaringan lalu coba lagi.'):rtt<300?'Koneksi bagus untuk mabar jarak jauh. 👍':'Terhubung tapi agak lambat. Mabar tetap bisa, mungkin terasa delay.'}</p><button class="btn" onclick="closeM()">OK</button>`)}
+  if(MP_RELAY){const t0=performance.now(),ms=await new Promise(r=>{try{const w=new WebSocket(MP_RELAY.replace(/\/$/,'')+'/r/TEST1?role=guest'),t=setTimeout(()=>{try{w.close()}catch(e){}r(-1)},6000);
+      w.onmessage=()=>{clearTimeout(t);try{w.close()}catch(e){}r(Math.round(performance.now()-t0))};w.onerror=()=>{clearTimeout(t);r(-1)}}catch(e){r(-1)}});
+    return mod(`<h3>🔧 HASIL TES JARINGAN</h3><div style="text-align:left;line-height:1.9;margin:8px 0">${ms>=0?'✅':'❌'} Server relay online ${ms>=0?'<small class="mut">('+ms+' ms)</small>':''}</div><p class="mut">${ms<0?'Server relay tidak terjangkau. Cek alamat MP_RELAY atau pindah jaringan.':ms<250?'Koneksi bagus untuk mabar jarak jauh. 👍':'Terhubung tapi agak lambat. Mabar tetap bisa, mungkin terasa delay.'}</p><button class="btn" onclick="closeM()">OK</button>`)}
+  const cfg=await mpCfg(),f={host:0,srflx:0,relay:0};let sig=false;
+  try{const pc=new RTCPeerConnection(cfg.config);pc.createDataChannel('t');
+    pc.onicecandidate=e=>{if(e.candidate){const m=/ typ (host|srflx|relay)/.exec(e.candidate.candidate);if(m)f[m[1]]++}};
+    await pc.setLocalDescription(await pc.createOffer());await new Promise(r=>setTimeout(r,6000));pc.close()}catch(e){}
+  try{const r=await fetch('https://0.peerjs.com/peerjs/id',{cache:'no-store'});sig=r.ok}catch(e){}
+  const ok=x=>x?'✅':'❌';
+  mod(`<h3>🔧 HASIL TES JARINGAN</h3><div style="text-align:left;line-height:1.9;margin:8px 0">${ok(sig)} Server perantara PeerJS<br>${ok(f.srflx)} STUN (alamat publik)<br>${ok(f.relay)} TURN relay <small class="mut">(kunci di WiFi sekolah)</small></div><p class="mut">${f.relay&&sig?'Jaringan ini siap untuk mabar. 👍':!sig?'Server perantara diblokir jaringan ini. Pindah ke data seluler / hotspot.':'TURN tidak terjangkau. Pindah ke data seluler / hotspot, atau isi kunci TURN sendiri (MP_TURN di kode).'}</p><button class="btn" onclick="closeM()">OK</button>`)}
+function mpLoad(){return new Promise((res,rej)=>{if(MP_ABLY){if(window.Ably)return res()}else if(MP_RELAY||window.Peer)return res();const U=MP_ABLY?['https://cdn.ably.com/lib/ably.min-2.js','https://cdn.jsdelivr.net/npm/ably@2/build/ably.min.js']:['https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js','https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js'];let i=0;
+  const nx=()=>{if(i>=U.length)return rej();const s=document.createElement('script');s.src=U[i++];s.onload=()=>(MP_ABLY?window.Ably:window.Peer)?res():nx();s.onerror=nx;document.head.appendChild(s)};nx()})}
 function mpReset(){try{MP.conns.forEach(c=>c.close())}catch(e){}try{MP.conn&&MP.conn.close()}catch(e){}try{MP.peer&&MP.peer.destroy()}catch(e){}
   Object.assign(MP,{conns:[],peer:null,conn:null,code:'',role:null,ready:{},starting:0,names:[],gr:null})}
 function mpSend(m){try{const c=RT.mp&&RT.mp.conn;if(c&&c.open)c.send(m)}catch(e){}}
-function mpBroadcast(m){try{(RT.mp?RT.mp.conns:MP.conns).forEach(c=>{try{c.open&&c.send(m)}catch(e){}})}catch(e){}}
+function mpBroadcast(m){try{const L=RT.mp?RT.mp.conns:MP.conns;if(MP.role==='host'&&MP.peer&&MP.peer.bcast){if(L.length)MP.peer.bcast(m);return}L.forEach(c=>{try{c.open&&c.send(m)}catch(e){}})}catch(e){}}
 const mpNames=()=>[S.d.user.name].concat(MP.conns.map(c=>c.pname||'Pemain'));
 const mpList=n=>n.map((x,i)=>`<div class="card" style="margin:4px 0;padding:6px 10px">${i?'🎮':'👑'} <b>${esc(x)}</b>${i?'':' <small class="mut">(host)</small>'}</div>`).join('')+Array.from({length:Math.max(0,3-n.length)},()=>'<div class="card" style="margin:4px 0;padding:6px 10px;opacity:.55">🤖 <b>AI</b> <small class="mut">(slot kosong diisi AI)</small></div>').join('');
 
 // ---- HOST: buat room ----
 async function mpHost(){
   try{await mpLoad()}catch(e){return toast('Mabar butuh internet bebas (modul PeerJS gagal dimuat). Coba jaringan lain.')}
-  mpReset();MP.role='host';mod('<h3>👥 Membuat room...</h3>');
+  MP.cfg=await mpCfg();mpReset();MP.role='host';mod('<h3>👥 Membuat room...</h3>');
   const mkp=()=>{MP.code=Array.from({length:5},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
-    const p=new Peer('cvmabar-'+MP.code);MP.peer=p;
+    const p=mpPeer('cvmabar-'+MP.code);MP.peer=p;
     p.on('open',()=>mpLobbyPush());
-    p.on('error',e=>{if(e.type==='unavailable-id'){try{p.destroy()}catch(x){}mkp()}else{toast('Mabar error: '+e.type);if(!RT.on)closeM()}});
+    p.on('error',e=>{if(e.type==='unavailable-id'){try{p.destroy()}catch(x){}mkp()}else{toast(mpErrTxt(e));if(!RT.on)closeM()}});
     p.on('connection',c=>{c.on('data',m=>mpHostMsg(c,m));c.on('close',()=>mpHostLeft(c))})};
   mkp()}
 function mpLobbyPush(){if(MP.role!=='host'||RT.on)return;const n=mpNames();
   mpBroadcast({t:'lobby',p:n});
   mod(`<h3>👥 ROOM MABAR</h3><p class="mut">Bagikan kode ini ke teman (maks 3 pemain, sisanya AI):</p><div class="big" style="letter-spacing:8px;font-weight:900">${MP.code}</div>${mpList(n)}<br>
-    <button class="btn m" onclick="mpCopy()">📋 BAGIKAN KODE</button><br><br><button class="btn" onclick="mpStart()">▶ MULAI (${n.length}/3 pemain)</button><br><br><button class="btn m" onclick="mpCancel()">BATAL</button>`)}
+    <small class="mut">Teman gagal gabung? Coba pakai data seluler/hotspot, lalu 🔧 TES JARINGAN di menu Battle.</small><br><button class="btn m" onclick="mpCopy()">📋 BAGIKAN KODE</button><br><br><button class="btn" onclick="mpStart()">▶ MULAI (${n.length}/3 pemain)</button><br><br><button class="btn m" onclick="mpCancel()">BATAL</button>`)}
 function mpCancel(){mpBroadcast({t:'closed'});setTimeout(()=>{mpReset()},300);closeM()}
 function mpHostMsg(c,m){if(!m)return;
   if(m.t==='hello'){if(RT.on||MP.starting||MP.conns.length>=2||MP.conns.indexOf(c)>=0){try{c.send({t:'full'})}catch(e){}setTimeout(()=>{try{c.close()}catch(e){}},400);return}
@@ -863,13 +965,14 @@ async function mpStart(){if(MP.starting||RT.on)return;MP.starting=1;MP.ready={};
 function mpJoinUI(){mod(`<h3>🔑 GABUNG ROOM</h3><p class="mut">Masukkan kode dari host:</p><input id="mpc" placeholder="KODE" maxlength="5" style="text-transform:uppercase;text-align:center;font-size:22px;letter-spacing:6px"><br><button class="btn" onclick="mpJoin()">GABUNG</button><br><br><button class="btn m" onclick="closeM()">BATAL</button>`)}
 async function mpJoin(){const code=($('#mpc').value||'').trim().toUpperCase();if(code.length<4)return toast('Isi kode room dulu');
   try{await mpLoad()}catch(e){return toast('Mabar butuh internet bebas (modul PeerJS gagal dimuat). Coba jaringan lain.')}
-  mpReset();MP.role='guest';mod('<h3>⏳ Menghubungkan ke room '+esc(code)+'...</h3>');
-  const p=new Peer();MP.peer=p;
-  p.on('error',e=>{toast(e.type==='peer-unavailable'?'Room tidak ditemukan. Cek kodenya.':'Mabar error: '+e.type);if(!RT.on){closeM();mpReset()}});
-  p.on('open',()=>{const c=p.connect('cvmabar-'+code,{reliable:true,serialization:'json'});MP.conn=c;
+  MP.cfg=await mpCfg();mpReset();MP.role='guest';mod('<h3>⏳ Menghubungkan ke room '+esc(code)+'...</h3>');
+  const p=mpPeer();MP.peer=p;
+  p.on('error',e=>{toast(mpErrTxt(e));if(!RT.on){closeM();mpReset()}});
+  p.on('open',()=>{const c=p.connect('cvmabar-'+code,{reliable:true,serialization:'json'});MP.conn=c;mod('<h3>⏳ Menyambung ke host...</h3><p class="mut">Menembus jaringan, bisa sampai 20 detik</p>');
+    try{c.peerConnection.addEventListener('iceconnectionstatechange',()=>{if(c.peerConnection.iceConnectionState==='failed')mpFail('Gagal terhubung: jaringan memblokir koneksi langsung. Coba data seluler/hotspot, atau jalankan 🔧 TES JARINGAN MABAR.')})}catch(e){}
     c.on('open',()=>c.send({t:'hello',name:S.d.user.name}));
     c.on('data',mpGuestMsg);c.on('close',mpGuestClosed)});
-  setTimeout(()=>{if(MP.role==='guest'&&!RT.on&&(!MP.conn||!MP.conn.open)){toast('Gagal terhubung. Jaringan mungkin memblokir koneksi langsung.');closeM();mpReset()}},12000)}
+  const tk=MP.tk=Date.now();setTimeout(()=>{if(MP.tk===tk)mpFail('Gagal terhubung. Jaringan mungkin memblokir koneksi langsung. Coba data seluler/hotspot atau jalankan 🔧 TES JARINGAN MABAR.')},20000)}
 function mpGuestMsg(m){if(!m)return;
   if(m.t==='lobby'&&!RT.on)mod(`<h3>👥 ROOM MABAR</h3><p class="mut">Menunggu host memulai...</p>${mpList(m.p)}<br><button class="btn m" onclick="mpLeave()">KELUAR</button>`);
   else if(m.t==='full'){toast('Room penuh atau sudah mulai');closeM();mpReset()}
@@ -921,7 +1024,7 @@ function mpBoard(){const L=RT.units.slice(0,3),mx=Math.max(...L.map(u=>u.kills|0
 function mpWake(){try{navigator.wakeLock&&navigator.wakeLock.request('screen').catch(()=>{})}catch(e){}}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&RT.on&&RT.mp)mpWake()});
 function mpCopy(){const t='Ayo mabar! Kode room: '+MP.code;if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(MP.code).then(()=>toast('Kode disalin: '+MP.code),()=>toast('Kode: '+MP.code));else toast('Kode: '+MP.code)}
-function mpTick(dt){const m=RT.mp;if(!m||!m.conns.length)return;m.snapT-=dt;if(m.snapT>0)return;m.snapT=1/20;const s=mpSnap();m.conns.forEach(c=>{try{c.open&&c.send(s)}catch(e){}})}
+function mpTick(dt){const m=RT.mp;if(!m||!m.conns.length)return;m.snapT-=dt;if(m.snapT>0)return;m.snapT=MP_ABLY?1/15:1/20;const s=mpSnap();m.conns.forEach(c=>{try{c.open&&c.send(s)}catch(e){}})}
 
 // ---- GUEST: terapkan snapshot + render mirror ----
 function mpApply(m){RT.t=m.T;RT.kills=m.k;if(m.E&&(!RT.ev||RT.ev.id!==m.E)){RT.ev=EVS.find(e=>e.id===m.E)||null;RT.evI=0}
@@ -941,7 +1044,7 @@ function gStep(dt){if(RT.qk)qaTick(dt);const k=Math.min(1,dt*14);
   const m=RT.mp,K=RT.keys,iv=inVec(),dx=iv.x,dy=iv.y;
   {const me=cu();if(!me.dead&&iv.m>0){move(me,iv.x,iv.y,dt);me.face=Math.atan2(iv.fy,iv.fx)}glide(me,dt)}
   m.pgT=(m.pgT||0)-dt;if(m.pgT<=0){m.pgT=2;mpSend({t:'ping',ts:performance.now()})}
-  m.inT-=dt;if(m.inT<=0){m.inT=1/20;
+  m.inT-=dt;if(m.inT<=0){m.inT=MP_ABLY?1/12:1/20;
     mpSend({t:'in',x:Math.round(dx*100)/100,y:Math.round(dy*100)/100,a:(RT.atk||K[' ']||K.j)?1:0})}}
 
 // ---- end ----
