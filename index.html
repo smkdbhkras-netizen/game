@@ -809,7 +809,7 @@ function rvDone(){mod(`<div class="big">📖</div><h2>REVIEW SELESAI</h2><p>${RV
 const MP={conns:[],peer:null,conn:null,code:'',role:null,ready:{},starting:0,names:[],gr:null};
 // ===== ONLINE TANPA RIBET: Ably (gratis, cukup 1 kunci) =====
 // Daftar di ably.com -> Create new app -> API Keys -> salin kunci ke sini. Contoh: 'abc123.xyz789:AbCdEfGh...'
-const MP_ABLY='mkTw-Q.mSAwaA:Ws6RCFo-pEEQaaHStp4z1A9jP56DC-eKJmN9qGfGi6A';
+const MP_ABLY='mkTw-Q.SqB_TA:owjN9wyJDAAxRQ8jtBVpZ6-208JXAzXo3EIoddJlRZU';
 class AblyPeer{ // meniru API PeerJS yang dipakai kode mabar
   constructor(id){this.h={};this.conns=new Map();this.dead=false;this.gc=null;this.host=!!id;
     this.code=id?id.replace('cvmabar-',''):null;this.gid=id?'host':'g'+Math.random().toString(36).slice(2,8);
