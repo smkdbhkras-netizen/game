@@ -29,6 +29,16 @@ pre{background:#050a1c;border:1px solid var(--line);border-radius:10px;padding:1
 .err{color:#ff6b8a;font-weight:800;animation:shake .3s}@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .map{position:relative;height:340px;border-radius:16px;border:1px solid var(--line);margin-bottom:12px;background:linear-gradient(#1a2c6a55 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,#1a2c6a55 1px,transparent 1px) 0 0/40px 40px,radial-gradient(circle,#13306b,#081028);overflow:hidden}
 .node{position:absolute;transform:translate(-50%,-50%);width:76px;height:76px;border-radius:50%;border:2px solid var(--c1);background:#0a1a40;color:#fff;font-size:28px;cursor:pointer;animation:pulse 2.2s infinite}.node small{display:block;font-size:9px;color:#fff}
+.xt{display:flex;gap:8px;margin-bottom:10px}.xt button{flex:1;padding:10px;border-radius:12px;border:1px solid var(--line);background:#0a1a40;color:var(--tx);font-weight:800;font-size:13px;cursor:pointer}.xt button.on{background:linear-gradient(135deg,var(--c1),#3a7bff);color:#001;border:0}
+#gw{position:relative;z-index:0}#gmap{height:min(62vh,480px);border-radius:16px;border:1px solid var(--line);background:#081028}
+#gst{position:absolute;left:56px;right:10px;top:10px;z-index:3;background:#0a1230ee;border:1px solid var(--line);border-radius:12px;padding:6px 10px;font-size:12px;text-align:center}#gst:empty{display:none}
+.gb{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:#0a1a40;color:var(--tx);font-weight:800;font-size:12px;cursor:pointer;margin-top:4px}
+.gbar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:8px 0;font-size:13px}
+.sp{position:relative;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:radial-gradient(circle,#13306b,#0a1a40);border:2px solid var(--c1);display:grid;place-items:center;font-size:22px;box-shadow:0 0 14px var(--c1);cursor:pointer}
+.sp.in{border-color:var(--ok);box-shadow:0 0 22px var(--ok);animation:pulse 1.4s infinite}
+.sp i{position:absolute;top:-7px;right:-5px;font-style:normal;font-size:13px}
+.sp b{position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-size:10px;background:#000b;padding:0 5px;border-radius:8px;color:#fff;white-space:nowrap}
+.me{width:20px;height:20px;margin:-10px 0 0 -10px;border-radius:50%;background:var(--c2);border:3px solid #fff;box-shadow:0 0 0 6px #ff2bd633,0 0 18px var(--c2)}
 @keyframes pulse{50%{box-shadow:0 0 22px var(--c1)}}
 .hero{text-align:center;border-width:2px}.hero .ic{font-size:38px}
 .r-Common{border-color:#9ca3af}.r-Uncommon{border-color:#39ff88}.r-Rare{border-color:#3b9eff}.r-Epic{border-color:#c15bff}.r-Legendary{border-color:var(--gold);box-shadow:0 0 14px #ffd24a66}
@@ -302,13 +312,13 @@ async function go(v){S.view=v;paint();
   if(v==='profile'){const r=await call('profile');if(r){S.prof=r;paint()}}
   if(v==='teacher'){const r=await call('teacher');if(r){S.teach=r;paint()}}}
 function paint(){
-  if(!S.d){$('#nav').innerHTML='';$('#app').innerHTML=loginV();return}
+  if(!S.d){gpStop();$('#nav').innerHTML='';$('#app').innerHTML=loginV();return}
   const V={home:homeV,explore:exploreV,dex:dexV,battle:battleV,rank:rankV,quest:questV,profile:profV,teacher:teachV};
   const lob=S.view==='home';$('#nav').style.display=lob?'none':'';
-  if(lob){$('#app').innerHTML=lobbyV();return}
+  if(lob){gpStop();$('#app').innerHTML=lobbyV();return}
   $('#app').innerHTML=hdr()+V[S.view]();
   const nav=NAV.slice();if(S.d.user.role!=='PLAYER')nav.push(['teacher','🧑‍🏫','GURU']);
-  $('#nav').innerHTML=nav.map(n=>`<button class="${S.view===n[0]?'on':''}" onclick="go('${n[0]}')"><b>${n[1]}</b>${n[2]}</button>`).join('')}
+  $('#nav').innerHTML=nav.map(n=>`<button class="${S.view===n[0]?'on':''}" onclick="go('${n[0]}')"><b>${n[1]}</b>${n[2]}</button>`).join('');gpHook()}
 function hdr(){const u=S.d.user;return `<div class="hdr"><span class="logo">CODEVERSE</span><span><span class="chip">LV ${u.level}</span><span class="chip">🪙 ${u.coin}</span></span></div>`}
 const xpBar=u=>`<div class="bar"><i style="width:${100*u.xpInto/u.xpNext}%"></i></div><small>XP ${u.xpInto} / ${u.xpNext}</small>`;
 function rankBar(u){const r=u.rank;if(!r.next)return `<b>${r.name}</b><div class="bar"><i style="width:100%"></i></div>`;
@@ -349,13 +359,119 @@ function lobbyV(){const u=S.d.user,o=S.d.owned,r=u.rank,ev=S.d.event,
   <div class="bt"><div class="t2">${tab('🗺','Explore','explore')}${tab('🦸','Codedex','dex')}${tab('🎯','Quest','quest',cl||'')}${tab('👤','Profile','profile')}</div>
    <button class="rk" onclick="go('battle')"><em>${'★'.repeat(st)+'☆'.repeat(5-st)}</em><b>BATTLE</b><small>${esc(r.name)}</small></button></div></div>`}
 
+// ===== PETA ASLI (GPS) — konsep Pokémon GO: jalan kaki sungguhan untuk menemukan Hero =====
+// PENGATURAN (silakan ubah)
+const GEO_FENCE=null;   // batasi area main, mis. {lat:-7.800000,lng:112.000000,r:400} (r = meter). null = bebas
+const ENC_R=45;         // jarak maksimal (meter) untuk menantang sinyal
+const SP_CELL=0.001;    // ukuran sel spawn (~111 m)
+const SP_SLOT=600000;   // sinyal baru muncul tiap 10 menit
+const SP_P=.2,SP_K=2;   // peluang spawn per sel & jumlah slot per sel (naikkan SP_P agar lebih ramai)
+const SP_RANGE=2;       // radius tampil dalam sel (2 = area sekitar ±250 m)
+const SPEED_MAX=4;      // m/detik (~14 km/jam); lebih cepat dianggap naik kendaraan
+const OSM_T='https://tile.openstreetmap.org/{z}/{x}/{y}.png',CARTO_T='https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png';
+const GP={pos:null,acc:0,wid:null,map:null,mk:{},me:null,rc:null,fc:null,iv:null,mt:0,follow:true,zoomed:false,err:'',last:null,fast:0,out:false,sim:false,lp:null,css:0,osm:0,mem:null,zoom:18};
+const gpUser=()=>{const u=S.d&&S.d.user;return(u&&(u.username||u.name))||'x'};
+function gpHav(a,b){const R=6371000,t=Math.PI/180,dl=(b.lat-a.lat)*t,dn=(b.lng-a.lng)*t,x=Math.sin(dl/2)**2+Math.cos(a.lat*t)*Math.cos(b.lat*t)*Math.sin(dn/2)**2;return 2*R*Math.asin(Math.min(1,Math.sqrt(x)))}
+function gpHash(a,b,c){let h=2166136261;for(const v of[a,b,c]){h^=(v|0);h=Math.imul(h,16777619);h^=h>>>13;h=Math.imul(h,2246822519)}return h>>>0}
+function gpRng(s){return()=>{s=(s+0x6D2B79F5)|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+// ---- sinyal yang sudah dipakai (hilang untuk pemain ini) & jarak jalan ----
+function spKey(){return'cv_spx_'+gpUser()}
+function spUsed(){try{const o=JSON.parse(localStorage.getItem(spKey())||'{}'),n=Date.now();let ch=0;for(const k in o)if(o[k]<n){delete o[k];ch=1}if(ch)localStorage.setItem(spKey(),JSON.stringify(o));return o}catch(e){return GP.mem||(GP.mem={})}}
+function spUse(id,exp){try{const o=spUsed();o[id]=exp;localStorage.setItem(spKey(),JSON.stringify(o))}catch(e){(GP.mem=GP.mem||{})[id]=exp}}
+function spDone(){const t=S.tk;if(S.sp&&t&&(t.kind==='capture'||t.kind==='box'))spUse(S.sp.id,S.sp.exp);S.sp=null;if(GP.map)gpDraw()}
+const wkFmt=m=>m<1000?Math.round(m)+' m':(m/1000).toFixed(2)+' km';
+function wkGet(){try{const o=JSON.parse(localStorage.getItem('cv_walk_'+gpUser())||'{}'),d=new Date().toDateString();if(o.d!==d){o.d=d;o.m=0}o.t=o.t||0;return o}catch(e){return{d:'',m:0,t:0}}}
+function wkAdd(m){const o=wkGet();o.m+=m;o.t+=m;try{localStorage.setItem('cv_walk_'+gpUser(),JSON.stringify(o))}catch(e){}const e=$('#gwk');if(e)e.textContent=wkFmt(o.m)}
+// ---- spawn deterministik: semua pemain di tempat & waktu yang sama melihat sinyal yang sama ----
+function gpSpawns(pos,now){const Z=Object.keys(S.d.zones||{});if(!Z.length)return[];
+  const ci=Math.floor(pos.lat/SP_CELL),cj=Math.floor(pos.lng/SP_CELL),s0=Math.floor(now/SP_SLOT),out=[],used=spUsed();
+  for(let i=ci-SP_RANGE;i<=ci+SP_RANGE;i++)for(let j=cj-SP_RANGE;j<=cj+SP_RANGE;j++)for(let s=s0-2;s<=s0;s++)for(let k=0;k<SP_K;k++){
+    const r=gpRng(gpHash(i,j,s*SP_K+k));if(r()>SP_P)continue;
+    const born=s*SP_SLOT+r()*SP_SLOT*.5,exp=born+(8+r()*8)*60000;if(now<born||now>=exp)continue;
+    const id=i+'_'+j+'_'+s+'_'+k;if(used[id])continue;
+    const lat=(i+.1+r()*.8)*SP_CELL,lng=(j+.1+r()*.8)*SP_CELL,zone=Z[Math.floor(r()*Z.length)],ph=r()*6.283,ar=6+r()*10;
+    if(GEO_FENCE&&gpHav({lat:lat,lng:lng},GEO_FENCE)>GEO_FENCE.r)continue;
+    out.push({id:id,lat:lat,lng:lng,zone:zone,born:born,exp:exp,ph:ph,ar:ar})}
+  return out}
+// sinyal "berkeliaran" pelan-pelan di sekitar titiknya
+function gpWander(sp,now){const t=now/1000;return{lat:sp.lat+Math.sin(t/4+sp.ph)*sp.ar/111320,lng:sp.lng+Math.cos(t/5.3+sp.ph)*sp.ar/111320}}
+function gpIcon(sp,inr,mins){const z=(S.d.zones||{})[sp.zone]||{i:'❓'};return L.divIcon({className:'',iconSize:[0,0],html:`<div class="sp${inr?' in':''}">${z.i}<i>❓</i><b>${mins}m</b></div>`})}
+// ---- GPS ----
+function gpOnPos(p){if(GP.sim)return;const c=p.coords;gpSet(c.latitude,c.longitude,c.accuracy||30,p.timestamp||Date.now(),c.speed,false)}
+function gpSet(lat,lng,acc,t,spd,sim){const np={lat:lat,lng:lng};
+  if(!sim){if(!GP.last)GP.last={lat:lat,lng:lng,t:t};
+    else{const d=gpHav(GP.last,np);if(d>=Math.max(6,acc*.5)&&acc<=40){const dt=Math.max(.5,(t-GP.last.t)/1000),v=(spd!=null&&!isNaN(spd)&&spd>=0)?spd:d/dt;
+      if(v>SPEED_MAX)GP.fast=Date.now();else if(d<200&&acc<=25)wkAdd(d);GP.last={lat:lat,lng:lng,t:t}}}}
+  GP.pos=np;GP.acc=acc;GP.err='';GP.out=!!(GEO_FENCE&&gpHav(np,GEO_FENCE)>GEO_FENCE.r);gpDraw(true)}
+function gpErr(e){if(e&&e.code===1){GP.err='denied';gpWatchStop()}else if(e&&e.code===2)GP.err='unavail';else GP.err='wait';gpDraw()}
+function gpStart(){if(GP.wid!=null)return;if(!navigator.geolocation){GP.err='nogps';gpDraw();return}
+  GP.err='';GP.wid=navigator.geolocation.watchPosition(gpOnPos,gpErr,{enableHighAccuracy:true,maximumAge:2000,timeout:25000});gpDraw()}
+function gpWatchStop(){if(GP.wid!=null){try{navigator.geolocation.clearWatch(GP.wid)}catch(e){}GP.wid=null}}
+function gpMapOff(){clearInterval(GP.iv);GP.iv=null;if(GP.map){try{GP.map.remove()}catch(e){}}GP.map=null;GP.mk={};GP.me=GP.rc=GP.fc=null}
+function gpStop(){GP.mt++;gpWatchStop();gpMapOff()}
+function gpHook(){if(S.view==='explore'&&xm()==='gps')gpMount();else gpStop()}
+// ---- Leaflet ----
+function gpLoadL(){if(window.L&&L.map)return Promise.resolve(true);if(GP.lp)return GP.lp;
+  if(!GP.css){GP.css=1;const c=document.createElement('link');c.rel='stylesheet';c.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';c.integrity='sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=';c.crossOrigin='';document.head.appendChild(c)}
+  return GP.lp=new Promise(r=>{const s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.integrity='sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=';s.crossOrigin='';s.onload=()=>r(!!window.L);s.onerror=()=>{GP.lp=null;r(false)};document.head.appendChild(s)})}
+function gpSt(h){const e=$('#gst');if(e&&e._h!==h){e._h=h;e.innerHTML=h}}
+function gpMount(){const tok=++GP.mt;gpSt('⏳ Memuat peta…');
+  gpLoadL().then(ok=>{const el=$('#gmap');if(tok!==GP.mt||!el||S.view!=='explore'||xm()!=='gps')return;
+    if(!ok){gpSt('⚠️ Peta gagal dimuat (cek internet).<br><button class="gb" onclick="paint()">COBA LAGI</button> <button class="gb" onclick="xmSet(\'node\')">PAKAI TITIK SINYAL</button>');return}
+    gpMapOff();const c=GP.pos||GEO_FENCE;
+    const map=GP.map=L.map(el,{zoomControl:true,attributionControl:true,minZoom:3,maxZoom:19,zoomSnap:.5}).setView(c?[c.lat,c.lng]:[-2.5,118],c?(GP.zoom||18):5);
+    const t=L.tileLayer(CARTO_T,{maxZoom:19,subdomains:'abcd',attribution:'© OpenStreetMap · © CARTO'}).addTo(map);let er=0;
+    t.on('tileerror',()=>{if(++er===8&&!GP.osm){GP.osm=1;map.removeLayer(t);L.tileLayer(OSM_T,{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(map)}});
+    map.on('dragstart',()=>{GP.follow=false});map.on('zoomend',()=>{GP.zoom=map.getZoom()});
+    map.on('click',e=>{if(GP.sim)gpSet(e.latlng.lat,e.latlng.lng,5,Date.now(),null,true)});
+    if(GEO_FENCE)GP.fc=L.circle([GEO_FENCE.lat,GEO_FENCE.lng],{radius:GEO_FENCE.r,color:'#ffd24a',weight:2,dashArray:'8 8',fill:false,interactive:false}).addTo(map);
+    GP.zoomed=!!GP.pos;GP.follow=true;clearInterval(GP.iv);GP.iv=setInterval(gpDraw,1000);
+    if(GP.wid==null&&!GP.sim){if(navigator.permissions&&navigator.permissions.query)navigator.permissions.query({name:'geolocation'}).then(r=>{if(r.state==='granted')gpStart();else gpDraw()}).catch(()=>gpDraw());else gpDraw()}
+    gpDraw(true)})}
+function gpCenter(){GP.follow=true;if(GP.map&&GP.pos)GP.map.setView([GP.pos.lat,GP.pos.lng],Math.max(GP.map.getZoom(),17))}
+function gpSim(){if(S.d.user.role==='PLAYER')return;GP.sim=!GP.sim;GP.last=null;
+  if(GP.sim){gpWatchStop();if(!GP.pos&&GP.map){const c=GP.map.getCenter();GP.pos={lat:c.lat,lng:c.lng};GP.acc=5}toast('🧪 Simulasi: ketuk peta untuk berpindah')}else GP.err='';paint()}
+function gpDraw(pan){const map=GP.map;if(!map||!map._container||!map._container.isConnected)return;
+  const now=Date.now(),fast=now-GP.fast<10000;
+  if(!GP.pos){
+    if(GP.err==='denied')gpSt('🚫 <b>Izin lokasi ditolak</b><br><small>Izinkan lokasi untuk situs ini di pengaturan browser, lalu coba lagi.</small><br><button class="gb" onclick="gpStart()">COBA LAGI</button> <button class="gb" onclick="xmSet(\'node\')">PAKAI TITIK SINYAL</button>');
+    else if(GP.err==='nogps')gpSt('⚠️ Perangkat/browser tidak mendukung GPS.<br><button class="gb" onclick="xmSet(\'node\')">PAKAI TITIK SINYAL</button>');
+    else gpSt(GP.wid==null?'📡 <b>Aktifkan lokasi</b> untuk berburu Hero sambil berjalan.<br><button class="gb" onclick="gpStart()">📍 AKTIFKAN LOKASI</button>':'📡 Mencari sinyal GPS…'+(GP.err==='unavail'?'<br><small>GPS belum tersedia — coba di tempat terbuka.</small>':''));
+    return}
+  const p=GP.pos,ll=[p.lat,p.lng];
+  if(!GP.me){GP.me=L.marker(ll,{icon:L.divIcon({className:'',iconSize:[0,0],html:'<div class="me"></div>'}),zIndexOffset:1000,interactive:false}).addTo(map);
+    GP.rc=L.circle(ll,{radius:ENC_R,color:'#00e5ff',weight:1.5,dashArray:'4 6',fillColor:'#00e5ff',fillOpacity:.07,interactive:false}).addTo(map)}
+  else{GP.me.setLatLng(ll);GP.rc.setLatLng(ll)}
+  if(!GP.zoomed){GP.zoomed=true;map.setView(ll,18)}else if(GP.follow&&gpHav(map.getCenter(),p)>3)map.panTo(ll,{animate:true,duration:.6});
+  const list=GP.out?[]:gpSpawns(p,now),ids={};let near=null,cnt=0;
+  list.forEach(sp=>{const q=gpWander(sp,now),d=gpHav(p,q);ids[sp.id]=1;cnt++;if(near==null||d<near)near=d;
+    const inr=!fast&&d<=ENC_R+Math.min(GP.acc||0,20),mins=Math.max(1,Math.ceil((sp.exp-now)/60000)),key=(inr?1:0)+'|'+mins;let m=GP.mk[sp.id];
+    if(!m){m=GP.mk[sp.id]=L.marker([q.lat,q.lng],{icon:gpIcon(sp,inr,mins),zIndexOffset:inr?500:0}).addTo(map);m.on('click',()=>spTap(sp.id));m._k=key}
+    else{m.setLatLng([q.lat,q.lng]);if(m._k!==key){m._k=key;m.setIcon(gpIcon(sp,inr,mins));m.setZIndexOffset(inr?500:0)}}
+    m._sp=sp});
+  for(const id in GP.mk)if(!ids[id]){map.removeLayer(GP.mk[id]);delete GP.mk[id]}
+  gpSt(GP.out?'🚧 <b>Di luar area bermain.</b><br><small>Kembali ke area bertanda kuning.</small>':fast?'🏍 <b>Terlalu cepat!</b> Jalan kaki ya 🚶 — sinyal tidak bisa ditantang.':`${GP.sim?'🧪 SIMULASI · ':''}📡 ±${Math.round(GP.acc)} m · 🎯 ${cnt} sinyal${near!=null?' · terdekat '+Math.round(near)+' m':''}`)}
+function spTap(id){const m=GP.mk[id],sp=m&&m._sp;if(!sp||!GP.pos)return;const now=Date.now();
+  if(now-GP.fast<10000)return toast('🏍 Terlalu cepat — jalan kaki ya!');
+  if(now>=sp.exp)return toast('Sinyal sudah hilang');
+  const d=gpHav(GP.pos,gpWander(sp,now)),lim=ENC_R+Math.min(GP.acc||0,20);
+  if(d>lim)return toast(`🚶 Terlalu jauh: ${Math.round(d)} m — dekati sampai ≤ ${ENC_R} m`);
+  zone(sp.zone,sp)}
+// ---- mode peta di layar Explore ----
+function xm(){try{const m=localStorage.getItem('cv_xm');if(m==='gps'||m==='node')return m}catch(e){}return navigator.geolocation?'gps':'node'}
+function xmSet(m){try{localStorage.setItem('cv_xm',m)}catch(e){}paint()}
+function xHead(){const Z=S.d.zones,gps=xm()==='gps',staff=S.d.user.role!=='PLAYER',w=wkGet();
+  const tg=`<div class="xt"><button class="${gps?'on':''}" onclick="xmSet('gps')">🌍 PETA ASLI</button><button class="${gps?'':'on'}" onclick="xmSet('node')">📍 TITIK SINYAL</button></div>`;
+  if(!gps)return tg+`<h3>🗺 Pilih titik sinyal</h3><div class="map">${Object.keys(Z).map(k=>`<button class="node" style="left:${POS[k][0]}%;top:${POS[k][1]}%" onclick="zone('${k}')">${Z[k].i}<small>${Z[k].n}</small></button>`).join('')}</div>`;
+  return tg+`<div id="gw"><div id="gmap"></div><div id="gst"></div></div><div class="gbar"><span>🚶 Hari ini: <b id="gwk">${wkFmt(w.m)}</b> · Total: <b>${wkFmt(w.t)}</b></span><span>${staff?`<button class="gb" onclick="gpSim()">🧪 ${GP.sim?'STOP SIMULASI':'SIMULASI'}</button> `:''}<button class="gb" onclick="gpCenter()">🎯 PUSAT</button></span></div><small class="mut">Jalan kaki mendekati sinyal (≤ ${ENC_R} m) lalu ketuk untuk menantangnya. Sinyal hilang dalam beberapa menit dan muncul baru tiap 10 menit.</small>`}
+
 // ===== EXPLORE + CAPTURE =====
 const POS={forest:[18,26],power:[62,16],fire:[84,46],ice:[24,66],crystal:[50,46],bug:[68,80]};
 function exploreV(){const b=S.d.boss,Z=S.d.zones;
-  return `<h3>🗺 Pilih titik sinyal</h3><div class="map">${Object.keys(Z).map(k=>`<button class="node" style="left:${POS[k][0]}%;top:${POS[k][1]}%" onclick="zone('${k}')">${Z[k].i}<small>${Z[k].n}</small></button>`).join('')}</div>
+  return `${xHead()}
 <div class="card" style="border-color:var(--c2)"><h3>👾 WEEKLY BOSS: ${b.name}</h3><div class="bar"><i style="width:${100*b.hp/b.max}%;background:linear-gradient(90deg,var(--c2),#ff7b7b)"></i></div><small>${b.hp} / ${b.max} HP — selesaikan challenge untuk memberi damage</small>
 ${b.hp>0?`<div class="row" style="margin-top:10px"><button class="btn m" onclick="boss('Variable')">Variable<br><small>500</small></button><button class="btn m" onclick="boss('Conditional')">IF/ELSE<br><small>700</small></button><button class="btn m" onclick="boss('Loop')">Loop<br><small>800</small></button><button class="btn m" onclick="boss('Debugging')">Debug<br><small>1000</small></button></div>`:'<h3 style="color:var(--ok)">BOSS DEFEATED!</h3>'}</div>`}
-async function zone(z){const r=await call('explore',{zone:z});if(!r)return;S.tk=r.ticket;S.cur=r;
+async function zone(z,sp){S.sp=sp||null;const r=await call('explore',{zone:z});if(!r)return;S.tk=r.ticket;S.cur=r;
   if(r.kind==='hero')mod(`<div class="big">❓</div><h2 style="color:var(--c1)">⚡ CODE SIGNAL DETECTED!</h2><h3>UNKNOWN HERO</h3><p>Type: ${r.hero.type}<br>Rarity: ${r.hero.rarity}</p><br><button class="btn" onclick="showCh()">INVESTIGATE</button> <button class="btn" style="background:#222;color:#fff" onclick="closeM()">PERGI</button>`);
   else mod(`<div class="big">📦</div><h2 style="color:var(--c1)">MYSTERY BOX FOUND!</h2><p>Pecahkan kunci logikanya untuk membuka.</p><br><button class="btn" onclick="showCh()">INVESTIGATE</button> <button class="btn" style="background:#222;color:#fff" onclick="closeM()">PERGI</button>`)}
 async function boss(t){const r=await call('boss',{topic:t});if(!r)return;S.tk=r.ticket;showCh()}
@@ -368,7 +484,7 @@ async function pick(i){lockOpts(i);
   const k=S.tk.kind,r=await call('answer',{ticketId:S.tk.ticketId,choice:i});if(!r){closeM();return}
   S.d.user=r.user;if(r.battle)S.b=r.battle;if(r.boss)S.d.boss=r.boss;
   const w=r.reward?`<div class="gain">+${r.reward.xp} XP &nbsp; +${r.reward.coin} COIN</div>`:'';
-  if(r.correct){
+  if(r.correct){spDone();
     if(k==='capture'){S.d.owned[r.hero.heroId]=1;resM('✓ CORRECT','CAPTURE SUCCESS!',`${hImg(r.hero.heroId,'height:110px')}<br><b>${r.hero.name.toUpperCase()} HAS JOINED YOUR CODEDEX!</b>${w}`)}
     else if(k==='box')resM('✓ CORRECT','MYSTERY BOX OPENED!',w);
     else if(k==='boss')resM('✓ CORRECT',`⚔️ ${r.damage} DAMAGE!`,(r.boss.hp<=0?'<b>BOSS DEFEATED! REWARD UNLOCKED</b>':'')+w);
