@@ -16,6 +16,24 @@ h2,h3{margin-bottom:8px}small,.mut{color:var(--mut)}
 .btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(.97)}.btn.m{background:linear-gradient(135deg,var(--c2),#8b5cf6);color:#fff;box-shadow:0 0 14px #ff2bd655}.btn:disabled{opacity:.4;box-shadow:none;cursor:default;transform:none}
 .bar{height:10px;background:#0a1230;border-radius:6px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--c1),var(--ok));transition:width .4s}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px}
+/* ===== MENU BATTLE (rapi & ramah) ===== */
+.btHd{display:flex;align-items:center;gap:10px;margin-bottom:12px}.btHd h3{margin:0;font-size:20px}.btHd small{display:block;margin-top:2px}
+.btHero{display:flex;align-items:center;gap:12px;padding:10px 12px;margin:0 0 10px;background:linear-gradient(135deg,#142455,#101a38)}
+.btHero .im{width:60px;min-width:60px;text-align:center}.btHero .nm{flex:1;text-align:left;min-width:0}.btHero .nm b{font-size:17px}
+.btHero .btn{width:auto;padding:9px 14px;font-size:14px}
+.btPills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.btPill{background:#0a1230;border:1px solid var(--line);color:var(--tx);border-radius:20px;padding:7px 13px;font-size:13px;cursor:pointer;transition:.15s}.btPill:hover{border-color:var(--c1)}
+.btTabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#0a1230;border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:12px}
+.btTab{background:0;border:0;color:var(--mut);padding:10px 4px;border-radius:10px;font-weight:800;font-size:14px;cursor:pointer;transition:.15s}
+.btTab.on{background:linear-gradient(135deg,var(--c1),#3b82f6);color:#001;box-shadow:0 0 12px #00e5ff55}
+.btMode{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border:1px solid var(--line);background:linear-gradient(135deg,#142455,#101a38);color:var(--tx);border-radius:16px;padding:14px;margin-bottom:10px;cursor:pointer;transition:.15s;font-family:inherit}
+.btMode:hover{border-color:var(--c1);transform:translateY(-2px)}.btMode:active{transform:scale(.98)}
+.btMode .ic{font-size:28px;width:50px;height:50px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:14px;background:#0a1230}
+.btMode.a .ic{background:linear-gradient(135deg,var(--c1),#3b82f6)}.btMode.b .ic{background:linear-gradient(135deg,var(--c2),#8b5cf6)}
+.btMode b{display:block;font-size:16px}.btMode small{display:block;margin-top:2px;line-height:1.4}.btMode .go{margin-left:auto;color:var(--mut);font-size:22px}
+.btNote{font-size:13px;text-align:center;margin-top:4px}.btNote a{color:var(--c1);cursor:pointer;text-decoration:underline}
+.btHow{text-align:left;background:#0a1230;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;font-size:14px;line-height:1.5}.btHow b.t{display:block;color:var(--c1);margin-bottom:2px}
+
 .row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1}
 .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
 #nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:#0a1230ee;border-top:1px solid var(--line);backdrop-filter:blur(8px);padding-bottom:env(safe-area-inset-bottom);z-index:5}
@@ -638,14 +656,31 @@ const skn=(u,i)=>i===1?u.hero.skill1:i===2?u.hero.skill2:u.hero.ultimate;
 function nearest(u,list,max){let b=null,d=max;list.forEach(x=>{const k=dist(u,x);if(k<d){d=k;b=x}});return b}
 
 // ---- setup screen ----
-function battleV(){const own=S.d.heroes.filter(h=>S.d.owned[h.heroId]);
-  return `<div class="card"><h3>⚔️ 3 VS 3 ARENA</h3><p class="mut">Setelah memilih mode, kamu masuk <b>layar Pilih Hero</b> untuk menentukan hero yang kamu mainkan. 2 teman satu tim dikendalikan AI. Kalau hero-mu mati, tunggu respawn. Gerakkan hero sendiri dengan joystick, serang musuh, push 3 lane (atas, tengah, bawah), hancurkan turret lalu crystal lawan. <b>Skill 1 & 2</b> = Quick Answer: jawab soal singkat (3 pilihan) tanpa menghentikan game, benar = skill penuh, salah/waktu habis = skill tetap keluar tapi lemah (60%). <b>Ultimate</b> = soal penuh, game berhenti sebentar. Soal yang salah dibahas di <b>REVIEW</b> akhir match (bonus XP). Jawab benar berturut-turut = <b>COMBO 🔥</b> (damage naik, cooldown turun). Soal yang salah akan muncul lagi sebagai <b>🔁 ULANGAN</b> di match berikutnya sampai kamu menguasainya. <b>Geser tombol skill ke arah musuh untuk membidik</b>, lepas untuk mengaktifkan (tap saja = bidik otomatis). Last-hit minion & kill musuh untuk dapat gold, beli item lewat tombol 🛒. Putar HP ke <b>landscape</b> untuk pengalaman terbaik.</p>
-  <div class="card" style="display:flex;align-items:center;gap:12px;margin:10px 0"><div style="min-width:70px;text-align:center">${S.team[0]&&S.d.owned[S.team[0]]?hImg(S.team[0],'height:70px'):'<span style="font-size:40px">❓</span>'}</div><div style="flex:1;text-align:left"><small class="mut">HERO KAMU</small><br><b>${S.team[0]&&S.d.owned[S.team[0]]?H(S.team[0]).name:'Otomatis (terkuat)'}</b></div><button class="btn m" style="width:auto;padding:8px 14px" onclick="selGo(null)">🎯 PILIH HERO</button></div>
-  <button class="btn m" style="margin-bottom:8px" onclick="subM()">📚 MAPEL SOAL · ${(S.d.subjects||SUBJ).length} dari 9 aktif</button> <button class="btn m" style="margin:0 0 8px 6px" onclick="mpTest()">🔧 TES JARINGAN MABAR</button>
-  <div class="row"><button class="btn" onclick="selGo('ai')">🤖 VS AI<br><small style="color:#012">Latihan · menang +10 RP</small></button><button class="btn m" onclick="selGo('pvp')">🌐 RANKED PvP<br><small style="color:#fde">+25 / -15 RP</small></button></div>
-  <div class="row" style="margin-top:8px"><button class="btn" onclick="selGo('host')">👥 MABAR<br><small style="color:#012">Buat room · ajak 2 teman</small></button><button class="btn m" onclick="selGo('join')">🔑 GABUNG<br><small style="color:#fde">Masukkan kode room</small></button></div>
-  <div class="row" style="margin-top:8px"><button class="btn" onclick="selGo('dai')">🥊 DUEL 1v1<br><small style="color:#012">Ala Pokémon · serang & bertahan pakai soal</small></button><button class="btn m" onclick="selGo('dhost')">🥊 DUEL ONLINE<br><small style="color:#fde">Buat room 1v1</small></button></div>
-  <button class="btn m" style="margin-top:8px" onclick="selGo('djoin')">🔑 GABUNG DUEL (kode 4 huruf)</button></div>`}
+function battleV(){
+  const t=S.bt||'solo',own=S.team[0]&&S.d.owned[S.team[0]],ns=(S.d.subjects||SUBJ).length;
+  const M={
+   solo:[['a','🤖','LATIHAN VS AI','Santai, 2 temanmu dikendalikan AI · menang +10 RP','ai'],
+         ['b','🌐','RANKED PvP','Lawan pemain lain · +25 / −15 RP','pvp']],
+   teman:[['a','👥','BUAT ROOM MABAR','Kamu jadi host, ajak sampai 2 teman','host'],
+          ['b','🔑','GABUNG MABAR','Masukkan kode room dari temanmu','join']],
+   duel:[['a','🥊','DUEL VS AI','Ala Pokémon: serang & bertahan pakai soal','dai'],
+         ['b','🥊','BUAT ROOM DUEL','Duel 1v1 online dengan temanmu','dhost'],
+         ['b','🔑','GABUNG DUEL','Masukkan kode 4 huruf','djoin']]}[t];
+  return `<div class="card"><div class="btHd"><div style="flex:1"><h3>⚔️ ARENA 3 VS 3</h3><small>3 menit · push 3 lane · hancurkan crystal lawan</small></div></div>
+  <div class="card btHero"><div class="im">${own?hImg(S.team[0],'height:56px'):'<span style="font-size:38px">❓</span>'}</div><div class="nm"><small class="mut">HERO KAMU</small><br><b>${own?esc(H(S.team[0]).name):'Otomatis (terkuat)'}</b></div><button class="btn m" onclick="selGo(null)">🎯 Ganti</button></div>
+  <div class="btPills"><button class="btPill" onclick="howM()">❓ Cara main</button><button class="btPill" onclick="subM()">📚 Mapel soal · ${ns}/${SUBJ.length}</button><button class="btPill" onclick="mpTest()">🔧 Tes jaringan</button></div>
+  <div class="btTabs">${[['solo','🎮 Solo'],['teman','👥 Teman'],['duel','🥊 Duel']].map(x=>`<button class="btTab${t===x[0]?' on':''}" onclick="bTab('${x[0]}')">${x[1]}</button>`).join('')}</div>
+  ${M.map(m=>`<button class="btMode ${m[0]}" onclick="selGo('${m[4]}')"><span class="ic">${m[1]}</span><span><b>${m[2]}</b><small class="mut">${m[3]}</small></span><span class="go">›</span></button>`).join('')}
+  ${t==='teman'?'<div class="btNote mut">Teman gagal terhubung? <a onclick="mpTest()">Tes jaringan</a> atau coba pakai data seluler/hotspot.</div>':''}</div>`}
+function bTab(t){S.bt=t;sfx('tick');paint()}
+function howM(){mod(`<h3>❓ CARA MAIN</h3>
+  <div class="btHow"><b class="t">🎯 Tujuan</b>Pilih mode lalu pilih hero. 2 temanmu dikendalikan AI. Push 3 lane (atas, tengah, bawah), hancurkan turret lalu crystal lawan dalam 3 menit. Hero gugur? Tunggu respawn.</div>
+  <div class="btHow"><b class="t">🕹 Kontrol</b>Gerakkan hero dengan joystick. <b>Geser tombol skill ke arah musuh</b> untuk membidik, lepas untuk mengaktifkan (tap saja = bidik otomatis). Putar HP ke <b>landscape</b> untuk pengalaman terbaik.</div>
+  <div class="btHow"><b class="t">⚡ Skill = jawab soal</b><b>Skill 1 & 2</b>: Quick Answer, soal singkat 3 pilihan tanpa menghentikan game. Benar = skill penuh, salah/waktu habis = skill tetap keluar tapi lemah (60%). <b>Ultimate</b>: soal penuh, game berhenti sebentar (saat Mabar, game tidak berhenti).</div>
+  <div class="btHow"><b class="t">🔥 Combo</b>Jawab benar berturut-turut: damage naik dan cooldown turun. Salah hanya mereset combo.</div>
+  <div class="btHow"><b class="t">📖 Review & 🔁 Ulangan</b>Soal yang salah dibahas di <b>REVIEW</b> akhir match (bonus XP) dan muncul lagi sebagai <b>🔁 ULANGAN</b> di match berikutnya sampai kamu menguasainya.</div>
+  <div class="btHow"><b class="t">🪙 Gold & item</b>Last-hit minion dan kalahkan musuh untuk dapat gold, beli item lewat tombol 🛒.</div>
+  <br><button class="btn" onclick="closeM()">MENGERTI</button>`)}
 
 // ===================== DUEL 1v1 ala POKEMON: serang & bertahan = jawab soal =====================
 const DU={on:0,box:{},wt:{},q:{1:0,2:0,3:0},pool:{1:[],2:[],3:[]}};
