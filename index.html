@@ -312,6 +312,17 @@ body{min-height:100vh;min-height:100dvh}
 @media(orientation:portrait) and (max-width:700px){#du{--sh:clamp(84px,min(26vh,38vw),190px)}.dz-sp.op{right:5%;top:20%}.dz-sp.pl{left:4%;bottom:16%}.dz-box{width:min(200px,47vw)}.dz-box.op{left:3%;top:3%}.dz-box.pl{right:3%;bottom:3%}.dz-bot{flex-direction:column;height:clamp(230px,50vh,400px)}#duAct{width:100%;flex:1}.dz-msg{flex:none;max-height:40%}.dz-top .ti{display:none}.dz-turn{font-size:11px}.dz-el .tn{display:none}}
 @media(max-height:480px){#du{--sh:clamp(70px,30vh,120px)}.dz-top{padding:3px 8px;font-size:12px}.dz-top button{min-height:28px;padding:3px 8px}.dz-box{padding:4px 8px 5px;width:min(240px,40vw)}.dz-nm{font-size:12px}.dz-hp{height:10px;margin:3px 0 2px}.dz-bot{padding:5px 8px;gap:6px;height:clamp(120px,42vh,200px)}.dz-msg{font-size:13px;padding:6px 8px}.dz-msg.q{font-size:12px}.dz-o{padding:5px 8px;font-size:12px;min-height:32px;margin:2px 0}.dz-mv{gap:5px;grid-auto-rows:minmax(40px,1fr)}.dz-b .ic{font-size:17px}.dz-b b{font-size:12px}#duAct{width:min(420px,58vw)}#duAct.qa{display:grid;grid-template-columns:1fr 1fr;gap:5px;align-content:start}#duAct.qa .dz-o{margin:0}.dz-box{width:min(230px,36vw)}.dz-ht{font-size:10px;min-height:13px}.dz-ult{margin-top:2px}.dz-ult .tk{height:6px}.dz-sp.op{right:27%;top:10%}.dz-sp.pl{left:26%;bottom:8%}.dz-ic .im{height:clamp(50px,22vh,120px)}}
 @media(max-height:480px) and (max-width:720px){.dz-sp.op{right:35%}.dz-sp.pl{left:23%}}
+/* ===== FIX: kartu HP tepat di ATAS hero masing-masing (bukan di sisi seberang) ===== */
+#du{--ox:11%;--px:10%;--oy:12%;--pb:7%;--bw:min(250px,44vw)}
+@media(orientation:portrait) and (max-width:700px){#du{--ox:5%;--px:4%;--oy:20%;--pb:16%;--bw:min(190px,46vw)}}
+@media(max-height:480px){#du{--oy:16%;--bw:min(210px,38vw)}}
+@media(max-height:480px) and (max-width:720px){#du{--ox:35%;--px:23%}}
+.dz-sp.op{right:var(--ox);top:var(--oy)}
+.dz-sp.pl{left:var(--px);bottom:var(--pb)}
+.dz-box{width:var(--bw)}
+.dz-box.op{left:auto;top:auto;bottom:calc(100% - var(--oy) - var(--sh)*.3);right:clamp(6px,calc(var(--ox) + var(--sh)*.54 - var(--bw)/2),calc(100% - var(--bw) - 6px))}
+.dz-box.pl{right:auto;top:auto;bottom:calc(var(--pb) + var(--sh)*.7);left:clamp(6px,calc(var(--px) + var(--sh)*.54 - var(--bw)/2),calc(100% - var(--bw) - 6px))}
+.dz-box::after{content:'';position:absolute;left:50%;bottom:-9px;margin-left:-8px;border:8px solid transparent;border-top-color:var(--el);border-bottom:0}
 </style></head><body>
 <div id="app"></div><div id="arena" class="hidden"></div><div id="modal" class="modal hidden"></div><div id="toast"></div><nav id="nav"></nav><div id="ld"><div class="lc"><div class="spin"></div><b id="ldt"></b><small id="lds"></small></div></div><div id="ldm"></div><div id="ls"></div>
 <script>
