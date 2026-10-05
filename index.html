@@ -235,6 +235,36 @@ body{min-height:100vh;min-height:100dvh}
 .lo .p,.lo #side,.lo #gold,.lo #sb,.lo #joy,.lo .ab,.lo #gs{box-shadow:none}
 .lo2 #vig{display:none}
 .lo2 .p i{transition:none}
+
+/* ===== DUEL 1v1 ===== */
+#du{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;background:linear-gradient(#0a1640 0%,#1a3a80 40%,#2f6b45 40.5%,#1c4a30 100%);color:#fff;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);user-select:none;-webkit-user-select:none}
+.du-top{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;font-size:13px;background:#0009}.du-top button{background:#ff4d6a22;color:#ff9aaa;border:1px solid #ff4d6a66;border-radius:8px;padding:4px 10px;font-size:12px}
+.du-fld{position:relative;flex:1;min-height:0;overflow:hidden}.du-fld.in{animation:duIn .6s}
+.du-sp{position:absolute;height:clamp(90px,36vh,210px);aspect-ratio:130/120;filter:drop-shadow(0 6px 10px #0007)}.du-sp img{height:100%;display:block}
+.du-sp::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:16px;background:radial-gradient(ellipse,#0009,transparent 70%);z-index:-1}
+.du-sp.op{right:10%;top:4%}.du-sp.op img{transform:scaleX(-1)}.du-sp.me{left:9%;bottom:3%}
+.du-box{position:absolute;width:min(270px,44vw);background:#0b1230ee;border:2px solid var(--c1);border-radius:12px;padding:6px 10px;box-shadow:0 3px 0 #0007}.du-box.op{left:3%;top:6%}.du-box.me{right:3%;bottom:6%;border-color:var(--gold)}
+.du-nm{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:13px}.du-nm small{color:var(--mut);font-size:11px;white-space:nowrap}
+.du-hp{height:10px;background:#1a2447;border-radius:6px;overflow:hidden;margin:4px 0 2px}.du-hp i{display:block;height:100%;width:100%;transition:width .7s ease,background .3s}.du-ht{text-align:right;font-size:11px}
+.du-ult{height:5px;background:#1a2447;border-radius:3px;overflow:hidden;margin-top:3px}.du-ult i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9f1c,#ff4d6a);transition:width .5s}
+.du-bot{display:flex;gap:10px;background:#060b1cf2;border-top:3px solid var(--c1);padding:8px 10px;height:clamp(135px,40vh,235px);overflow:hidden}
+.du-msg{flex:1;min-width:0;background:#0a1230;border:2px solid #ffffff22;border-radius:10px;padding:8px 10px;font-size:15px;line-height:1.4;overflow-y:auto}.du-msg.q{font-size:13px}
+#duAct{width:min(380px,58vw);overflow-y:auto}
+.du-mv{display:grid;grid-template-columns:1fr 1fr;gap:6px;height:100%}
+.du-b{border:0;border-radius:10px;color:#012;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:13px;cursor:pointer;line-height:1.2}.du-b small{font-size:10px;opacity:.75}.du-b:disabled{filter:grayscale(1);opacity:.4}
+.du-b.b0{background:linear-gradient(135deg,#00e5ff,#3b82f6)}.du-b.b1{background:linear-gradient(135deg,#c084fc,#818cf8)}.du-b.b2{background:linear-gradient(135deg,#4ade80,#2dd4bf)}.du-b.b3{background:linear-gradient(135deg,#fb923c,#f43f5e)}
+.du-o{display:block;width:100%;margin:3px 0;padding:8px 10px;background:#0f1b45;color:#fff;border:2px solid var(--line);border-radius:10px;text-align:left;font-size:13px;cursor:pointer}.du-o.right{border-color:#3ddc84;background:#0f3a2a}.du-o.wrong{border-color:#ff4d6a;background:#3a1020}
+.du-tm{height:6px;background:#1a2447;border-radius:3px;overflow:hidden;margin:5px 0}.du-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff4d6a,#ffd24a,#3ddc84)}
+.du-qt{margin-top:2px;white-space:pre-wrap}.du-chip{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:900;font-size:12px}.du-chip.atk{background:#ffd24a;color:#221}.du-chip.def{background:#00e5ff;color:#012}
+.du-pop{position:absolute;font-size:24px;font-weight:900;text-shadow:0 2px 0 #000;animation:duPop 1.1s forwards;pointer-events:none}.du-pop.o{right:16%;top:12%}.du-pop.m{left:16%;bottom:24%}
+.lm{animation:duLm .38s}.lo{animation:duLo .38s}.hit{animation:duHit .5s}.shake{animation:duShake .35s}
+@keyframes duLm{40%{transform:translate(min(22vw,170px),-22px)}}@keyframes duLo{40%{transform:translate(max(-22vw,-170px),22px)}}
+@keyframes duHit{20%,60%{transform:translateX(-9px);filter:brightness(2.4) saturate(0)}40%,80%{transform:translateX(9px)}}
+@keyframes duShake{20%{transform:translate(-6px,4px)}40%{transform:translate(6px,-4px)}60%{transform:translate(-4px,-3px)}80%{transform:translate(4px,3px)}}
+@keyframes duPop{0%{opacity:0;transform:translateY(10px) scale(.6)}20%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:translateY(-44px)}}
+@keyframes duIn{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:none}}
+@media(orientation:portrait) and (max-width:700px){.du-bot{flex-direction:column;height:clamp(200px,50vh,380px)}#duAct{width:100%}.du-msg{flex:none;max-height:42%}}
+@media(max-height:480px){.du-top{padding:3px 10px;font-size:12px}.du-box{padding:4px 8px}.du-nm{font-size:12px}.du-msg{font-size:13px;padding:6px 8px}.du-msg.q{font-size:12px}.du-o{padding:6px 8px;font-size:12px;margin:2px 0}.du-bot{padding:5px 8px}}
 </style></head><body>
 <div id="app"></div><div id="arena" class="hidden"></div><div id="modal" class="modal hidden"></div><div id="toast"></div><nav id="nav"></nav><div id="ld"><div class="lc"><div class="spin"></div><b id="ldt"></b><small id="lds"></small></div></div><div id="ldm"></div><div id="ls"></div>
 <script>
@@ -555,7 +585,165 @@ function battleV(){const own=S.d.heroes.filter(h=>S.d.owned[h.heroId]);
   <div class="card" style="display:flex;align-items:center;gap:12px;margin:10px 0"><div style="min-width:70px;text-align:center">${S.team[0]&&S.d.owned[S.team[0]]?hImg(S.team[0],'height:70px'):'<span style="font-size:40px">❓</span>'}</div><div style="flex:1;text-align:left"><small class="mut">HERO KAMU</small><br><b>${S.team[0]&&S.d.owned[S.team[0]]?H(S.team[0]).name:'Otomatis (terkuat)'}</b></div><button class="btn m" style="width:auto;padding:8px 14px" onclick="selGo(null)">🎯 PILIH HERO</button></div>
   <button class="btn m" style="margin-bottom:8px" onclick="subM()">📚 MAPEL SOAL · ${(S.d.subjects||SUBJ).length} dari 9 aktif</button> <button class="btn m" style="margin:0 0 8px 6px" onclick="mpTest()">🔧 TES JARINGAN MABAR</button>
   <div class="row"><button class="btn" onclick="selGo('ai')">🤖 VS AI<br><small style="color:#012">Latihan · menang +10 RP</small></button><button class="btn m" onclick="selGo('pvp')">🌐 RANKED PvP<br><small style="color:#fde">+25 / -15 RP</small></button></div>
-  <div class="row" style="margin-top:8px"><button class="btn" onclick="selGo('host')">👥 MABAR<br><small style="color:#012">Buat room · ajak 2 teman</small></button><button class="btn m" onclick="selGo('join')">🔑 GABUNG<br><small style="color:#fde">Masukkan kode room</small></button></div></div>`}
+  <div class="row" style="margin-top:8px"><button class="btn" onclick="selGo('host')">👥 MABAR<br><small style="color:#012">Buat room · ajak 2 teman</small></button><button class="btn m" onclick="selGo('join')">🔑 GABUNG<br><small style="color:#fde">Masukkan kode room</small></button></div>
+  <div class="row" style="margin-top:8px"><button class="btn" onclick="selGo('dai')">🥊 DUEL 1v1<br><small style="color:#012">Ala Pokémon · serang & bertahan pakai soal</small></button><button class="btn m" onclick="selGo('dhost')">🥊 DUEL ONLINE<br><small style="color:#fde">Buat room 1v1</small></button></div>
+  <button class="btn m" style="margin-top:8px" onclick="selGo('djoin')">🔑 GABUNG DUEL (kode 4 huruf)</button></div>`}
+
+// ===================== DUEL 1v1 ala POKEMON: serang & bertahan = jawab soal =====================
+const DU={on:0,box:{},wt:{},q:{1:0,2:0,3:0},pool:{1:[],2:[],3:[]}};
+const DADV={Fire:['Nature','Ice'],Nature:['Earth','Electric'],Earth:['Fire','Digital'],Electric:['Wind','Ice'],Ice:['Nature','Earth'],Digital:['Wind','Nature'],Wind:['Fire']};
+const DTM=(a,d)=>(DADV[a]||[]).includes(d)?1.3:(DADV[d]||[]).includes(a)?.75:1; // keunggulan elemen
+function duMoves(u){const k=KIND[u.id]||['shot','aoe','aoe'];
+  return[{n:'Serang',pw:1,d:1,cd:0,k:'basic',ic:'⚔️'},{n:u.s1,pw:1.6,d:2,cd:2,k:k[0],ic:'✨'},{n:u.s2,pw:2,d:2,cd:3,k:k[1],ic:'🌀'},{n:u.ult,pw:3.2,d:3,cd:0,k:k[2],ic:'💥',ult:1}]}
+function duFighter(u,owner){if(!H(u.id))u=Object.assign({},u,{id:'H1'});const h=H(u.id),mx=Math.round(clamp(+u.max||100,10,2000)*2.2);
+  return{id:u.id,name:String(u.name||h.name).slice(0,20),owner:owner,lv:+u.lv||1,type:h.type,spd:(ROLE[h.role]||ROLE.Attack).s,atk:clamp(+u.atk||10,1,300),def:clamp(+u.def||5,0,300),
+    max:mx,hp:mx,gauge:0,cd:[0,0,0,0],sh:0,st:0,mv:duMoves({id:u.id,s1:String(u.s1||h.skill1).slice(0,30),s2:String(u.s2||h.skill2).slice(0,30),ult:String(u.ult||h.ultimate).slice(0,30)})}}
+function duSend(m){try{const c=MP.role==='host'?MP.conns[0]:MP.conn;if(c&&c.open)c.send(m)}catch(e){}}
+function duWait(key,to){return new Promise(res=>{if(DU.box[key]!=null){const v=DU.box[key];delete DU.box[key];return res(v)}
+  const tm=setTimeout(()=>{delete DU.wt[key];res(null)},to);DU.wt[key]=v=>{clearTimeout(tm);delete DU.wt[key];res(v)}})}
+function duOnMsg(m){const key=m.t==='dmv'?'mv'+m.k:m.t==='dans'?'ans'+m.k:null;if(!key)return;if(DU.wt[key])DU.wt[key](m);else DU.box[key]=m}
+function duFill(d){[1,2,3].forEach(x=>{if(d&&x!==d)return;let n=DU.pool[x].length+DU.q[x];
+  while(n<2&&DU.on){n++;DU.q[x]++;call('rtq',{diff:x},1).then(r=>{DU.q[x]--;if(r&&DU.on)DU.pool[x].push(r.ticket)})}})}
+
+// ---- mulai: ambil sesi + soal dari server, lalu AI / buat room / gabung ----
+async function duBegin(mode){if(S.starting)return;S.starting=1;loadShow('MENYIAPKAN DUEL','Memanggil hero...');
+  try{const r=await call('rtstart',{mode:'ai',team:S.team},1);if(!r){loadHide();return}
+    S.d.user=r.user;loadHide();DU.r=r;DU.pool=r.pool;DU.q={1:0,2:0,3:0};
+    if(mode==='ai')duInit('ai',r.mine[0],r.foe[0],r.foeName||'AI Bug Squad',true);else if(mode==='host')duHost();else duJoinUI()}
+  finally{S.starting=0}}
+function duInit(mode,mu,ou,oname,host){
+  Object.assign(DU,{on:1,over:0,fin:0,mode:mode,me:duFighter(mu,S.d.user.name),op:duFighter(ou,oname),k:1,box:{},wt:{},host:!!host,okN:0,badN:0});
+  DU.q={1:0,2:0,3:0};const m=DU.me,o=DU.op;DU.att=(m.spd>o.spd||(m.spd===o.spd&&host))?'me':'op';
+  duBuild();duFill();duLoop()}
+
+// ---- tampilan ----
+function duBuild(){let e=$('#du');if(e)e.remove();e=document.createElement('div');e.id='du';
+  const box=(p,cls)=>`<div class="du-box ${cls}"><div class="du-nm"><b id="du${p}n"></b><small id="du${p}l"></small></div><div class="du-hp"><i id="du${p}h"></i></div><div class="du-ht"><small id="du${p}t"></small></div><div class="du-ult"><i id="du${p}g"></i></div></div>`;
+  e.innerHTML=`<div class="du-top"><b>🥊 DUEL 1v1</b><span id="duRd"></span><button onclick="duQuit()">🏳 Menyerah</button></div>
+   <div class="du-fld" id="duFld">${box('o','op')}<div class="du-sp op" id="duOs">${hImg(DU.op.id,'height:100%')}</div><div class="du-sp me" id="duMs">${hImg(DU.me.id,'height:100%')}</div>${box('m','me')}</div>
+   <div class="du-bot"><div id="duMsg" class="du-msg"></div><div id="duAct"></div></div>`;
+  document.body.appendChild(e);duRender()}
+function duRender(){const set=(p,f)=>{const pc=Math.max(0,f.hp/f.max*100),b=$('#du'+p+'h');if(!b)return;$('#du'+p+'n').textContent=f.name+(f.owner?' · '+f.owner:'');$('#du'+p+'l').textContent=' Lv'+f.lv+' '+f.type;
+    b.style.width=pc+'%';b.style.background=pc>50?'#3ddc84':pc>20?'#ffd24a':'#ff4d6a';$('#du'+p+'t').textContent=Math.max(0,Math.round(f.hp))+' / '+f.max+(f.sh?' 🛡':'')+(f.st>=2?' 🔥x'+f.st:'');$('#du'+p+'g').style.width=f.gauge+'%'};
+  set('m',DU.me);set('o',DU.op);const r=$('#duRd');if(r)r.textContent='Ronde '+Math.ceil(DU.k/2)}
+function duSay(t,hold){return new Promise(res=>{const e=$('#duMsg');if(!e||!DU.on)return res();e.className='du-msg';e.textContent='';let i=0;clearInterval(DU.ty);
+  DU.ty=setInterval(()=>{e.textContent=t.slice(0,++i);if(i>=t.length){clearInterval(DU.ty);setTimeout(res,hold==null?650:hold)}},16);
+  e.onclick=()=>{clearInterval(DU.ty);e.textContent=t;setTimeout(res,150)}})}
+function duAnim(id,cls,ms){const e=$('#'+id);if(!e)return sleep(ms);e.classList.remove(cls);void e.offsetWidth;e.classList.add(cls);return sleep(ms)}
+function duPop(s,t,col,big){const f=$('#duFld');if(!f)return;const p=document.createElement('div');p.className='du-pop '+s;p.textContent=t;p.style.color=col||'#fff';if(big)p.style.fontSize='34px';f.appendChild(p);setTimeout(()=>p.remove(),1100)}
+async function duHit(s,dmg,crit){const f=s==='m'?DU.me:DU.op;sfx('hit');duAnim(s==='m'?'duMs':'duOs','hit',500);duPop(s,'-'+dmg,'#ff6b8a',crit);
+  f.hp=Math.max(0,f.hp-dmg);duRender();if(crit)duAnim('duFld','shake',350);await sleep(700)}
+
+// ---- jurus & soal ----
+function duPickMove(){return new Promise(res=>{const m=DU.me,e=$('#duAct');if(!e)return res(0);$('#duMsg').className='du-msg';$('#duMsg').textContent='Pilih jurusmu! (12 detik)';
+  e.innerHTML='<div class="du-mv">'+m.mv.map((v,i)=>{const off=(i>0&&!v.ult&&m.cd[i]>0)||(v.ult&&m.gauge<100),sub=v.ult?(m.gauge<100?'ULT '+m.gauge+'%':'SIAP!'):(i&&m.cd[i]>0?'CD '+m.cd[i]:(KL[v.k]||'Dasar'));
+    return `<button class="du-b b${i}" ${off?'disabled':''} data-i="${i}"><b>${v.ic} ${esc(v.n)}</b><small>${sub}</small></button>`}).join('')+'</div>';
+  let done=0,left=12;const pick=i=>{if(done)return;done=1;clearInterval(tm);e.innerHTML='';res(i)};
+  e.querySelectorAll('button').forEach(b=>b.onclick=()=>pick(+b.dataset.i));const tm=setInterval(()=>{if(--left<=0||!DU.on)pick(0)},1000)})}
+async function duAsk(d,role){let tk=DU.pool[d].shift();
+  if(!tk){const mg=$('#duMsg');if(mg)mg.textContent='⚙️ Menyiapkan soal...';const r=await call('rtq',{diff:d},1);if(!r||!DU.on)return{ok:false,ms:99999};tk=r.ticket}
+  duFill(d);
+  return new Promise(res=>{const T=[0,15,20,25][d],t0=performance.now(),msg=$('#duMsg'),act=$('#duAct');if(!msg||!act)return res({ok:false,ms:99999});
+    msg.className='du-msg q';msg.innerHTML=`<span class="du-chip ${role}">${role==='atk'?'⚔️ SERANG!':'🛡 BERTAHAN!'}</span> <small class="mut">${esc(tk.topic||'')}</small><div class="du-tm"><i id="duTm"></i></div><div class="du-qt">${esc(tk.question)}</div>`;
+    act.innerHTML=tk.options.map((o,i)=>`<button class="du-o" data-i="${i}">${esc(o)}</button>`).join('');
+    let done=0,iv=0;const fin=n=>{if(done)return;done=1;clearInterval(iv);const ms=performance.now()-t0,ok=n>=0&&fnv_(tk.salt+'|'+tk.options[n])===tk.v;
+      act.querySelectorAll('button').forEach((b,i)=>{b.disabled=true;if(fnv_(tk.salt+'|'+tk.options[i])===tk.v)b.classList.add('right');else if(i===n)b.classList.add('wrong')});
+      call('answer',{ticketId:tk.ticketId,choice:n},1);sfx(ok?'ok':'tick');setTimeout(()=>res({ok:ok,ms:ms}),950)};
+    act.querySelectorAll('button').forEach(b=>b.onclick=()=>fin(+b.dataset.i));
+    iv=setInterval(()=>{if(!DU.on){clearInterval(iv);return}const l=1-(performance.now()-t0)/1000/T,e=$('#duTm');if(e)e.style.width=Math.max(0,l*100)+'%';if(l<=0)fin(-1)},100)})}
+const duAiAns=d=>({ok:Math.random()<[0,.82,.66,.5][d],ms:2500+Math.random()*9000});
+function duAiMove(A){const c=[0,0];if(A.gauge>=100)c.push(3,3,3);[1,2].forEach(i=>{if(A.cd[i]<=0)c.push(i)});return c[Math.floor(Math.random()*c.length)]}
+
+// ---- satu pertukaran: penyerang pilih jurus -> dua pemain jawab soal -> hitung hasil ----
+async function duExchange(){
+  const meA=DU.att==='me',A=meA?DU.me:DU.op,D=meA?DU.op:DU.me;let mi=0;
+  A.cd=A.cd.map(c=>Math.max(0,c-1));duRender();
+  if(meA){mi=await duPickMove();duSend({t:'dmv',k:DU.k,mi:mi})}
+  else if(DU.mode==='ai')mi=duAiMove(A);
+  else{await duSay(A.name+' memilih jurus...',0);const m=await duWait('mv'+DU.k,26000);mi=m?clamp(m.mi|0,0,3):0}
+  if(!DU.on)return;
+  let mv=A.mv[mi];if((mi>0&&!mv.ult&&A.cd[mi]>0)||(mv.ult&&A.gauge<100)){mi=0;mv=A.mv[0]}
+  await duSay(A.name+' menggunakan '+mv.n+'!');if(!DU.on)return;
+  const T=[0,15,20,25][mv.d],opP=DU.mode==='ai'?Promise.resolve(duAiAns(mv.d)):duWait('ans'+DU.k,(T+8)*1000);
+  const mine=await duAsk(mv.d,meA?'atk':'def');if(!DU.on)return;
+  DU.me.ok=mine.ok;if(mine.ok)DU.okN++;else DU.badN++;duSend({t:'dans',k:DU.k,ok:mine.ok?1:0,ms:Math.round(mine.ms)});
+  const ac=$('#duAct');if(ac)ac.innerHTML='';const mg=$('#duMsg');if(mg){mg.className='du-msg';mg.textContent='Menunggu '+DU.op.owner+' menjawab...'}
+  let th=await opP;th=th?{ok:!!th.ok,ms:+th.ms||99999}:{ok:false,ms:99999};if(!DU.on)return;
+  await duResolve(A,D,mv,mi,meA?mine:th,meA?th:mine,meA)}
+async function duResolve(A,D,mv,mi,ar,dr,meA){const aS=meA?'m':'o',dS=meA?'o':'m';
+  const bonus=ar.ok?(1+Math.min(.32,A.st*.08))*(ar.ms<5000?1.3:1):.3,eff=DTM(A.type,D.type),mit=100/(100+D.def*(mv.k==='dash'?.6:1.2));
+  let blk=dr.ok?(dr.ms<4000?.25:.4):1;if(D.sh){blk*=.5;D.sh=0}
+  const dmg=Math.max(1,Math.round(A.atk*mv.pw*1.8*bonus*eff*mit*blk)),crit=ar.ok&&ar.ms<5000;
+  if(mv.ult)A.gauge=0;if(mi>0)A.cd[mi]=mv.cd;
+  [[A,ar],[D,dr]].forEach(([f,r])=>{f.st=r.ok?f.st+1:0;f.gauge=Math.min(100,f.gauge+(r.ok?25:10))});
+  await duSay(ar.ok?(crit?'Jawaban kilat! Serangan kritis!':'Jawaban benar! Serangan penuh!'):'Jawaban salah... serangan melemah.',500);if(!DU.on)return;
+  await duSay(dr.ok?(dr.ms<4000?D.name+' menangkis dengan sempurna!':D.name+' bertahan dengan jawaban benar!'):D.name+' gagal bertahan!',500);if(!DU.on)return;
+  await duAnim(meA?'duMs':'duOs',meA?'lm':'lo',380);await duHit(dS,dmg,crit);
+  if(eff>1)await duSay('Sangat efektif!',450);else if(eff<1)await duSay('Kurang efektif...',450);
+  if(mv.k==='heal'){const h=Math.round(A.max*(ar.ok?.18:.08));A.hp=Math.min(A.max,A.hp+h);duPop(aS,'+'+h,'#3ddc84');duRender();await duSay(A.name+' memulihkan HP!',450)}
+  if(mv.k==='shield'&&ar.ok){A.sh=1;duRender();await duSay(A.name+' memasang perisai!',450)}
+  if(A.st>=3){duRender();await duSay('🔥 Combo x'+A.st+'!',400)}
+  duRender();if(D.hp<=0){DU.over=1;DU.win=D===DU.op?1:0}}
+async function duLoop(){await duAnim('duFld','in',10);await duSay('Duel dimulai! '+DU.me.name+' VS '+DU.op.name+'!',700);
+  while(DU.on&&!DU.over){await duExchange();if(!DU.on)return;if(DU.over)break;DU.k++;DU.att=DU.att==='me'?'op':'me';
+    if(DU.k>30){DU.over=1;DU.win=DU.me.hp/DU.me.max>=DU.op.hp/DU.op.max?1:0;await duSay('Waktu habis! Pemenang ditentukan dari sisa HP.',900)}}
+  if(DU.on)duFinish(DU.win)}
+async function duFinish(win){if(DU.fin)return;DU.fin=1;DU.over=1;sfx(win?'win':'lose');
+  await duSay(win?DU.op.name+' tumbang! Kamu menang! 🏆':DU.me.name+' tumbang... Kamu kalah 💀',1000);
+  const st={r:Math.ceil(DU.k/2),ok:DU.okN,bad:DU.badN},sid=DU.r.sid;duClose();mod('<h3>⚙️ Menghitung hasil...</h3>');
+  const r=await call('rtend',{sid:sid,win:win?true:false});
+  if(!r){closeM();paint();return}
+  S.d.user=r.user;RV.l=r.review||[];
+  if(r.invalid){mod(`<h2>${r.invalid}</h2><br>${rvBtn()}<button class="btn" onclick="closeM();paint()">OK</button>`);return}
+  const x=r.result;
+  mod(`<div class="big">${x.win?'🏆':'💀'}</div><h2 style="color:${x.win?'var(--ok)':'#ff6b8a'}">${x.win?'MENANG!':'KALAH'}</h2><div class="gain">+${x.xp} XP &nbsp; +${x.coin} COIN</div><p>RANK POINT <b>${x.rp>0?'+':''}${x.rp}</b><br>${x.rank}</p><p class="mut">🥊 ${st.r} ronde · ✅ ${st.ok} benar · ❌ ${st.bad} salah</p><br>${rvBtn()}<button class="btn" onclick="closeM();paint()">LANJUT</button>`)}
+function duClose(){DU.on=0;clearInterval(DU.ty);const e=$('#du');if(e)e.remove();if(DU.mode==='net'){setTimeout(()=>mpReset(),1200)}}
+function duQuit(){if(!DU.on||DU.fin)return;if(!confirm('Menyerah? Kamu dianggap kalah.'))return;if(DU.mode==='net')duSend({t:'dbye'});duFinish(0)}
+function duPeerLeft(){if(!DU.on||DU.fin)return;DU.fin=1;DU.over=1;duClose();mod('<h3>🔌 Lawan keluar</h3><p class="mut">Duel dihentikan tanpa reward.</p><button class="btn" onclick="closeM();paint()">OK</button>')}
+
+// ---- DUEL ONLINE (memakai jalur jaringan mabar: Ably / relay / P2P) ----
+async function duHost(){
+  try{await mpLoad()}catch(e){return toast('Duel online butuh internet bebas. Coba jaringan lain.')}
+  MP.cfg=await mpCfg();mpReset();MP.role='host';mod('<h3>🥊 Membuat room duel...</h3>');
+  const mkp=()=>{MP.code=Array.from({length:4},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[Math.floor(Math.random()*32)]).join('');
+    const p=mpPeer('cvmabar-'+MP.code);MP.peer=p;
+    p.on('open',()=>{MP.opened=1;duLobby()});
+    p.on('error',e=>{if(e.type==='unavailable-id'){try{p.destroy()}catch(x){}mkp()}else{toast(mpErrTxt(e));closeM()}});
+    p.on('connection',c=>{c.on('data',m=>duHostMsg(c,m));c.on('close',()=>duGuestLeft(c))})};
+  MP.opened=0;mkp();const tk=MP.tk=Date.now();
+  setTimeout(()=>{if(MP.tk===tk&&MP.role==='host'&&!MP.opened){toast('Gagal membuat room: server online tidak terjangkau. Jalankan 🔧 TES JARINGAN MABAR.');closeM();mpReset()}},15000)}
+function duLobby(){if(MP.role!=='host'||DU.on)return;const g=MP.conns[0];
+  mod(`<h3>🥊 ROOM DUEL 1v1</h3><p class="mut">Bagikan kode ini ke temanmu:</p><div class="big" style="letter-spacing:10px;font-weight:900">${MP.code}</div>
+    <div class="card" style="margin:8px 0">${g?'🎮 <b>'+esc(g.pname)+'</b> sudah masuk':'⏳ Menunggu lawan...'}</div>
+    <button class="btn m" onclick="duCopy()">📋 BAGIKAN KODE</button><br><br><button class="btn" ${g?'':'disabled'} onclick="duStartNet()">▶ MULAI DUEL</button><br><br><button class="btn m" onclick="duCancel()">BATAL</button>`)}
+function duCopy(){const t='Ayo duel 1v1! Kode room: '+MP.code;if(navigator.share)navigator.share({text:t}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(MP.code).then(()=>toast('Kode disalin: '+MP.code),()=>toast('Kode: '+MP.code));else toast('Kode: '+MP.code)}
+function duCancel(){duSend({t:'closed'});setTimeout(()=>mpReset(),300);closeM()}
+function duHostMsg(c,m){if(!m)return;
+  if(m.t==='dhello'){if(DU.on||MP.conns.length>=1){try{c.send({t:'full'})}catch(e){}setTimeout(()=>{try{c.close()}catch(e){}},400);return}
+    c.pname=String(m.name||'Pemain').slice(0,20);DU.opU=m.unit;DU.opN=c.pname;MP.conns.push(c);try{c.send({t:'dready',name:S.d.user.name,unit:DU.r.mine[0]})}catch(e){}duLobby();return}
+  if(m.t==='dbye'){duGuestLeft(c);return}
+  duOnMsg(m)}
+function duGuestLeft(c){const k=MP.conns.indexOf(c);if(k>=0){MP.conns.splice(k,1);try{c.close()}catch(e){}}if(DU.on)duPeerLeft();else duLobby()}
+function duStartNet(){if(!MP.conns[0]||!DU.opU)return;closeM();duSend({t:'dgo'});duInit('net',DU.r.mine[0],DU.opU,DU.opN,true)}
+function duJoinUI(){mod(`<h3>🔑 GABUNG DUEL</h3><p class="mut">Masukkan kode 4 huruf dari temanmu:</p><input id="duc" placeholder="KODE" maxlength="4" style="text-transform:uppercase;text-align:center;font-size:24px;letter-spacing:8px;width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#0a1230;color:#fff"><br><br><button class="btn" onclick="duJoin()">GABUNG</button><br><br><button class="btn m" onclick="closeM()">BATAL</button>`)}
+async function duJoin(){const code=($('#duc').value||'').trim().toUpperCase();if(code.length!==4)return toast('Kode duel terdiri dari 4 huruf/angka');
+  try{await mpLoad()}catch(e){return toast('Duel online butuh internet bebas. Coba jaringan lain.')}
+  MP.cfg=await mpCfg();mpReset();MP.role='guest';MP.code=code;MP.gotReady=0;mod('<h3>🔌 Menyambung ke room...</h3><p class="mut">Bisa sampai 20 detik</p>');
+  const p=mpPeer();MP.peer=p;
+  p.on('error',e=>{toast(mpErrTxt(e));if(!DU.on){closeM();mpReset()}});
+  p.on('open',()=>{const c=p.connect('cvmabar-'+code,{reliable:true,serialization:'json'});MP.conn=c;
+    c.on('open',()=>c.send({t:'dhello',name:S.d.user.name,unit:DU.r.mine[0]}));
+    c.on('data',m=>duGuestMsg(m));
+    c.on('close',()=>{if(DU.on)duPeerLeft();else if(MP.role==='guest'){toast('Room ditutup host');closeM();mpReset()}});
+    const tk=MP.tk=Date.now();setTimeout(()=>{if(MP.tk===tk&&!DU.on&&!MP.gotReady){toast('Gagal terhubung. Cek kode room atau jalankan 🔧 TES JARINGAN MABAR.');closeM();mpReset()}},20000)})}
+function duGuestMsg(m){if(!m)return;
+  if(m.t==='dready'){MP.gotReady=1;DU.opU=m.unit;DU.opN=String(m.name||'Host').slice(0,20);mod(`<h3>✅ Terhubung ke ${esc(DU.opN)}</h3><p class="mut">Menunggu host memulai duel...</p><button class="btn m" onclick="duLeave()">KELUAR</button>`)}
+  else if(m.t==='dgo'){if(!DU.opU)return;closeM();duInit('net',DU.r.mine[0],DU.opU,DU.opN,false)}
+  else if(m.t==='full'){toast('Room sudah penuh');closeM();mpReset()}
+  else if(m.t==='closed'){toast('Host menutup room');closeM();mpReset()}
+  else if(m.t==='dbye')duPeerLeft();
+  else duOnMsg(m)}
+function duLeave(){duSend({t:'dbye'});closeM();mpReset()}
 // ===================== LAYAR PILIH HERO (sebelum main) =====================
 const KL={shot:'🎯 Tembakan',dash:'💨 Dash',aoe:'💥 Area',heal:'💚 Penyembuh',shield:'🛡 Perisai'};
 const HS={on:0,id:null,mode:null,lp:0,u:{face:0,team:0,x:58,y:80,ph:0,mv:0,atkT:0,castT:0}};
@@ -565,7 +753,7 @@ function selGo(mode){const own=S.d.heroes.filter(h=>S.d.owned[h.heroId]);if(!own
 function hsPick(id){if(!S.d.owned[id])return toast('Hero belum dimiliki — tangkap lewat Explore');HS.id=id;sfx('tick');hsR()}
 function hsClose(){HS.on=0;const e=$('#hs');if(e)e.remove()}
 function hsRnd(){const o=S.d.heroes.filter(h=>S.d.owned[h.heroId]);HS.id=o[Math.floor(Math.random()*o.length)].heroId;sfx('tick');hsR()}
-function hsOK(){S.team=[HS.id];const m=HS.mode;hsClose();sfx('ok');if(m==='ai'||m==='pvp')rtGo(m);else if(m==='host')mpHost();else if(m==='join')mpJoinUI();else paint()}
+function hsOK(){S.team=[HS.id];const m=HS.mode;hsClose();sfx('ok');if(m==='ai'||m==='pvp')rtGo(m);else if(m==='host')mpHost();else if(m==='join')mpJoinUI();else if(m==='dai')duBegin('ai');else if(m==='dhost')duBegin('host');else if(m==='djoin')duBegin('join');else paint()}
 function hsLoop(){if(HS.lp)return;HS.lp=1;let last=performance.now();(function f(){if(!HS.on){HS.lp=0;return}
   const c=$('#hsc'),n=performance.now(),dt=Math.min(.05,(n-last)/1000);last=n;
   if(c){const x=c.getContext('2d'),u=HS.u,q=(n/1000)%4;u.id=HS.id;u.hero=H(HS.id);u.mv=q<1.6?.1:0;if(u.mv>0)u.ph+=dt;
@@ -575,8 +763,8 @@ function hsLoop(){if(HS.lp)return;HS.lp=1;let last=performance.now();(function f
 function hsR(){const h=H(HS.id),L=S.d.owned[HS.id],m=1+.12*(L-1),ro=ROLE[h.role]||ROLE.Attack,K=KIND[h.heroId]||['shot','aoe','aoe'];
   const mx=k=>Math.max(...S.d.heroes.map(z=>+z[k]||1))*1.6,
    bar=(n,v,mm)=>`<div style="display:flex;align-items:center;gap:6px;font-size:12px"><span style="width:36px;text-align:left">${n}</span><div class="bar" style="flex:1"><i style="width:${Math.min(100,v/mm*100)}%"></i></div><b style="width:40px;text-align:right">${v}</b></div>`;
-  const lbl={ai:'🤖 VS AI',pvp:'🌐 RANKED PvP',host:'👥 BUAT ROOM MABAR',join:'🔑 GABUNG MABAR'}[HS.mode]||'',
-   ok={ai:'⚔️ MULAI BATTLE',pvp:'⚔️ CARI LAWAN',host:'👥 BUAT ROOM',join:'🔑 LANJUT GABUNG'}[HS.mode]||'✅ PILIH HERO INI';
+  const lbl={ai:'🤖 VS AI',pvp:'🌐 RANKED PvP',host:'👥 BUAT ROOM MABAR',join:'🔑 GABUNG MABAR',dai:'🥊 DUEL 1v1 VS AI',dhost:'🥊 BUAT ROOM DUEL',djoin:'🥊 GABUNG DUEL'}[HS.mode]||'',
+   ok={ai:'⚔️ MULAI BATTLE',pvp:'⚔️ CARI LAWAN',host:'👥 BUAT ROOM',join:'🔑 LANJUT GABUNG',dai:'🥊 MULAI DUEL',dhost:'🥊 BUAT ROOM DUEL',djoin:'🥊 LANJUT GABUNG'}[HS.mode]||'✅ PILIH HERO INI';
   const sk=[h.skill1,h.skill2,h.ultimate].map((n,i)=>`<div class="sk"><b style="font-size:16px;color:var(--gold)">${i===2?'★':i+1}</b><div><b>${esc(n)}</b><br><small class="mut">${KL[K[i]]||''}${i===2?' · Ultimate':''}</small></div></div>`).join('');
   const gr=S.d.heroes.map(z=>{const o=S.d.owned[z.heroId];return `<div class="card hero r-${z.rarity} hsC${z.heroId===HS.id?' on':''}" style="margin:0;${o?'':'opacity:.4;filter:grayscale(1)'}" onclick="hsPick('${z.heroId}')"><div class="ic">${o?hImg(z.heroId,'height:50px'):'🔒'}</div><small><b>${o?esc(z.name):'???'}</b></small></div>`}).join('');
   $('#hs').innerHTML=`<div class="hh"><b style="font-size:18px">🎯 PILIH HERO <small class="mut">${lbl}</small></b><button class="btn m" style="width:auto;padding:6px 14px" onclick="hsClose()">✕</button></div>
