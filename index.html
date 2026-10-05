@@ -236,35 +236,82 @@ body{min-height:100vh;min-height:100dvh}
 .lo2 #vig{display:none}
 .lo2 .p i{transition:none}
 
-/* ===== DUEL 1v1 ===== */
-#du{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;background:linear-gradient(#0a1640 0%,#1a3a80 40%,#2f6b45 40.5%,#1c4a30 100%);color:#fff;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);user-select:none;-webkit-user-select:none}
-.du-top{display:flex;justify-content:space-between;align-items:center;padding:6px 12px;font-size:13px;background:#0009}.du-top button{background:#ff4d6a22;color:#ff9aaa;border:1px solid #ff4d6a66;border-radius:8px;padding:4px 10px;font-size:12px}
-.du-fld{position:relative;flex:1;min-height:0;overflow:hidden}.du-fld.in{animation:duIn .6s}
-.du-sp{position:absolute;height:clamp(90px,36vh,210px);aspect-ratio:130/120;filter:drop-shadow(0 6px 10px #0007)}.du-sp img{height:100%;display:block}
-.du-sp::after{content:'';position:absolute;left:0;right:0;bottom:-8px;height:16px;background:radial-gradient(ellipse,#0009,transparent 70%);z-index:-1}
-.du-sp.op{right:10%;top:4%}.du-sp.op img{transform:scaleX(-1)}.du-sp.me{left:9%;bottom:3%}
-.du-box{position:absolute;width:min(270px,44vw);background:#0b1230ee;border:2px solid var(--c1);border-radius:12px;padding:6px 10px;box-shadow:0 3px 0 #0007}.du-box.op{left:3%;top:6%}.du-box.me{right:3%;bottom:6%;border-color:var(--gold)}
-.du-nm{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:13px}.du-nm small{color:var(--mut);font-size:11px;white-space:nowrap}
-.du-hp{height:10px;background:#1a2447;border-radius:6px;overflow:hidden;margin:4px 0 2px}.du-hp i{display:block;height:100%;width:100%;transition:width .7s ease,background .3s}.du-ht{text-align:right;font-size:11px}
-.du-ult{height:5px;background:#1a2447;border-radius:3px;overflow:hidden;margin-top:3px}.du-ult i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9f1c,#ff4d6a);transition:width .5s}
-.du-bot{display:flex;gap:10px;background:#060b1cf2;border-top:3px solid var(--c1);padding:8px 10px;height:clamp(135px,40vh,235px);overflow:hidden}
-.du-msg{flex:1;min-width:0;background:#0a1230;border:2px solid #ffffff22;border-radius:10px;padding:8px 10px;font-size:15px;line-height:1.4;overflow-y:auto}.du-msg.q{font-size:13px}
-#duAct{width:min(380px,58vw);overflow-y:auto}
-.du-mv{display:grid;grid-template-columns:1fr 1fr;gap:6px;height:100%}
-.du-b{border:0;border-radius:10px;color:#012;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:13px;cursor:pointer;line-height:1.2}.du-b small{font-size:10px;opacity:.75}.du-b:disabled{filter:grayscale(1);opacity:.4}
-.du-b.b0{background:linear-gradient(135deg,#00e5ff,#3b82f6)}.du-b.b1{background:linear-gradient(135deg,#c084fc,#818cf8)}.du-b.b2{background:linear-gradient(135deg,#4ade80,#2dd4bf)}.du-b.b3{background:linear-gradient(135deg,#fb923c,#f43f5e)}
-.du-o{display:block;width:100%;margin:3px 0;padding:8px 10px;background:#0f1b45;color:#fff;border:2px solid var(--line);border-radius:10px;text-align:left;font-size:13px;cursor:pointer}.du-o.right{border-color:#3ddc84;background:#0f3a2a}.du-o.wrong{border-color:#ff4d6a;background:#3a1020}
-.du-tm{height:6px;background:#1a2447;border-radius:3px;overflow:hidden;margin:5px 0}.du-tm i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ff4d6a,#ffd24a,#3ddc84)}
-.du-qt{margin-top:2px;white-space:pre-wrap}.du-chip{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:900;font-size:12px}.du-chip.atk{background:#ffd24a;color:#221}.du-chip.def{background:#00e5ff;color:#012}
-.du-pop{position:absolute;font-size:24px;font-weight:900;text-shadow:0 2px 0 #000;animation:duPop 1.1s forwards;pointer-events:none}.du-pop.o{right:16%;top:12%}.du-pop.m{left:16%;bottom:24%}
-.lm{animation:duLm .38s}.lo{animation:duLo .38s}.hit{animation:duHit .5s}.shake{animation:duShake .35s}
-@keyframes duLm{40%{transform:translate(min(22vw,170px),-22px)}}@keyframes duLo{40%{transform:translate(max(-22vw,-170px),22px)}}
-@keyframes duHit{20%,60%{transform:translateX(-9px);filter:brightness(2.4) saturate(0)}40%,80%{transform:translateX(9px)}}
-@keyframes duShake{20%{transform:translate(-6px,4px)}40%{transform:translate(6px,-4px)}60%{transform:translate(-4px,-3px)}80%{transform:translate(4px,3px)}}
-@keyframes duPop{0%{opacity:0;transform:translateY(10px) scale(.6)}20%{opacity:1;transform:scale(1.2)}100%{opacity:0;transform:translateY(-44px)}}
-@keyframes duIn{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:none}}
-@media(orientation:portrait) and (max-width:700px){.du-bot{flex-direction:column;height:clamp(200px,50vh,380px)}#duAct{width:100%}.du-msg{flex:none;max-height:42%}}
-@media(max-height:480px){.du-top{padding:3px 10px;font-size:12px}.du-box{padding:4px 8px}.du-nm{font-size:12px}.du-msg{font-size:13px;padding:6px 8px}.du-msg.q{font-size:12px}.du-o{padding:6px 8px;font-size:12px;margin:2px 0}.du-bot{padding:5px 8px}}
+/* ===== DUEL 1v1 (UI baru) ===== */
+#du{position:fixed;inset:0;z-index:12;display:flex;flex-direction:column;background:#0a1230;color:#fff;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);user-select:none;-webkit-user-select:none;touch-action:manipulation;--sh:clamp(80px,min(34vh,40vw),230px)}
+.dz-top{display:flex;align-items:center;gap:8px;padding:6px 10px;background:linear-gradient(#000d,#0009);font-size:13px;z-index:6}
+.dz-top .ti{font-weight:900;letter-spacing:1px;white-space:nowrap}
+.dz-top .rd{background:#ffffff18;border-radius:99px;padding:2px 10px;font-size:12px;white-space:nowrap}
+.dz-turn{flex:1;min-width:0;text-align:center;font-weight:800;font-size:12px;padding:3px 10px;border-radius:99px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#ffffff12}
+.dz-turn.atk{background:#ffd24a;color:#241a00}.dz-turn.def{background:#00e5ff;color:#012}
+.dz-top button{background:#ffffff14;color:#fff;border:1px solid #ffffff33;border-radius:10px;padding:5px 10px;font-size:13px;min-height:32px;cursor:pointer}
+.dz-top .sur{background:#ff4d6a22;color:#ff9aaa;border-color:#ff4d6a66;font-size:12px}
+.dz-fld{position:relative;flex:1;min-height:0;overflow:hidden;background:radial-gradient(circle at 80% 17%,#fff8d0 0 3.5%,#ffe08a66 4% 8%,#0000 9%),linear-gradient(#1b2f6e 0%,#3f6bc4 30%,#8fc2f5 50%,#8fc2f5 51%,#3a9455 51.2%,#27693b 100%)}
+.dz-fld::before{content:'';position:absolute;left:-5%;right:-5%;top:33%;height:18%;background:radial-gradient(ellipse 30% 100% at 15% 100%,#2c5f86 0 98%,#0000 100%),radial-gradient(ellipse 36% 100% at 55% 100%,#274f78 0 98%,#0000 100%),radial-gradient(ellipse 28% 100% at 92% 100%,#2c5f86 0 98%,#0000 100%);opacity:.85}
+.dz-fld::after{content:'';position:absolute;left:0;right:0;top:51%;bottom:0;background:repeating-linear-gradient(100deg,#ffffff0a 0 38px,#0000 38px 76px);pointer-events:none}
+.dz-fld.in{animation:dzFin .6s}
+.dz-cl{position:absolute;width:90px;height:26px;border-radius:50%;background:#ffffffaa;filter:blur(3px);animation:dzCl 40s linear infinite}
+.dz-sp{position:absolute;height:var(--sh);aspect-ratio:130/120;z-index:3}
+.dz-sp.op{right:11%;top:9%}.dz-sp.pl{left:10%;bottom:7%}
+.dz-pad{position:absolute;left:-12%;right:-12%;bottom:-6%;height:22%;border-radius:50%;background:radial-gradient(ellipse,#000a 0,#0003 55%,#0000 72%);border:2px solid var(--el);box-shadow:0 0 14px var(--el),inset 0 0 12px #0008;opacity:.85}
+.dz-hit,.dz-bob{position:relative;width:100%;height:100%}
+.dz-bob{animation:dzBob 2.4s ease-in-out infinite;filter:drop-shadow(0 8px 10px #0008)}.dz-sp.op .dz-bob{animation-delay:-1.1s}
+.dz-sp.act .dz-bob{filter:drop-shadow(0 0 14px var(--el)) drop-shadow(0 8px 10px #0008)}
+.dz-sp img{height:100%;display:block}.dz-sp.op img{transform:scaleX(-1)}
+.dz-bub{position:absolute;inset:-6% -10% -2%;border-radius:50%;border:3px solid #7de3ff;background:radial-gradient(circle at 35% 30%,#ffffff55,#35c8ff22 55%,#35c8ff44);box-shadow:0 0 22px #35c8ffaa,inset 0 0 18px #7de3ff88;opacity:0;transform:scale(.6);transition:opacity .3s,transform .3s;pointer-events:none}
+.dz-sp.sh .dz-bub{opacity:1;transform:scale(1);animation:dzPulse 1.6s ease-in-out infinite}
+.dz-box{position:absolute;width:min(290px,46vw);background:linear-gradient(#101a46f2,#0a1233f2);border:2px solid var(--el);border-radius:14px;padding:7px 10px 8px;box-shadow:0 4px 0 #0008,0 0 16px #0006;z-index:4}
+.dz-box.op{left:3%;top:5%}.dz-box.pl{right:3%;bottom:6%}.dz-box.low{animation:dzLow .9s ease-in-out infinite}
+.dz-nm{display:flex;justify-content:space-between;align-items:baseline;gap:6px;font-size:14px}.dz-nm b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dz-nm small{color:#b6c3ee;font-size:11px;white-space:nowrap}
+.dz-el{display:inline-block;background:#ffffff14;border:1px solid var(--el);color:var(--el);border-radius:99px;padding:0 6px;font-size:10px;font-weight:800;margin-right:3px}
+.dz-hp{position:relative;height:13px;background:#0d1535;border:1px solid #ffffff22;border-radius:8px;overflow:hidden;margin:5px 0 3px}
+.dz-hp i{position:absolute;left:0;top:0;bottom:0;width:100%;border-radius:8px}.dz-hp i.gh{background:#fff;opacity:.85;transition:width .9s ease .45s}.dz-hp i:not(.gh){transition:width .35s ease,background .3s}
+.dz-ht{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;min-height:16px}
+.dz-st .p{display:inline-block;border-radius:99px;padding:0 7px;font-size:10px;font-weight:800;margin-left:3px}.dz-st .p.sh{background:#35c8ff33;color:#8fe3ff;border:1px solid #35c8ff}.dz-st .p.cb{background:#ff9f1c33;color:#ffc277;border:1px solid #ff9f1c}
+.dz-ult{display:flex;align-items:center;gap:6px;margin-top:4px}.dz-ult .tk{flex:1;height:8px;background:#1d2a5c;border:1px solid #ffffff22;border-radius:5px;overflow:hidden}.dz-ult i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9f1c,#ff4d6a);transition:width .5s}
+.dz-ult em{font-size:9px;font-style:normal;font-weight:900;color:#ffb347}.dz-box.ultr .dz-ult .tk{box-shadow:0 0 10px #ff9f1c;animation:dzPulse 1s infinite}
+.dz-fxl{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.dz-f{position:absolute;pointer-events:none;will-change:transform,opacity}
+.dz-p,.dz-ring,.dz-tr{border-radius:50%}.dz-ring{box-sizing:border-box}
+.dz-wave{border-radius:50%;box-sizing:border-box}
+.dz-proj{border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,var(--c) 45%,#0000 72%);box-shadow:0 0 22px var(--c),0 0 44px var(--c)}
+.dz-slash{border-radius:50%;border-style:solid;border-width:7px 0 0 0;border-color:#fff;box-sizing:border-box}
+.dz-guard{border-radius:50%;border:4px solid #7de3ff;background:radial-gradient(circle,#7de3ff44,#7de3ff11 60%,#0000 70%);box-shadow:0 0 24px #7de3ff;box-sizing:border-box}
+.dz-pop{font-weight:900;font-size:26px;text-shadow:0 2px 0 #000,0 0 10px #000a;white-space:nowrap;animation:dzPop 1.15s forwards;z-index:7}.dz-pop.big{font-size:40px}
+.dz-ban{left:0;right:0;top:32%;text-align:center;font-weight:900;font-style:italic;font-size:clamp(28px,8vh,62px);letter-spacing:2px;color:#fff;text-shadow:0 0 18px var(--c),0 0 40px var(--c),0 4px 0 #000;background:linear-gradient(90deg,#0000,#000b 20%,#000b 80%,#0000);padding:6px 0;z-index:6}
+.dz-conf{width:9px;height:14px;border-radius:2px}
+.dz-bot{display:flex;gap:10px;background:linear-gradient(#070c22f5,#050816f8);border-top:3px solid var(--c1);padding:8px 10px;height:clamp(150px,38vh,260px);z-index:6}
+.dz-msg{flex:1;min-width:0;background:#0b1332;border:2px solid #ffffff22;border-radius:12px;padding:10px 12px;font-size:16px;line-height:1.45;overflow-y:auto;position:relative}.dz-msg.q{font-size:14px}
+.dz-msg:not(.q):not(:empty)::after{content:'▶';position:absolute;right:10px;bottom:6px;font-size:11px;opacity:.5;animation:dzBlink 1s infinite}
+.dz-chip{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:900;font-size:12px}.dz-chip.atk{background:#ffd24a;color:#221}.dz-chip.def{background:#00e5ff;color:#012}.dz-chip.pick{background:#c084fc;color:#1a0b2e}
+.dz-tm{height:7px;background:#1a2447;border-radius:4px;overflow:hidden;margin:6px 0}.dz-tm i{display:block;height:100%;width:100%;background:#3ddc84;transform-origin:left;transition:transform .1s linear}.dz-tm i.mid{background:#ffd24a}.dz-tm i.low{background:#ff4d6a;animation:dzPulse .6s infinite}
+.dz-qt{margin-top:2px;white-space:pre-wrap}
+#duAct{width:min(430px,56vw);overflow-y:auto;overflow-x:hidden}
+.dz-mv{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(54px,1fr);gap:8px;height:100%}
+.dz-b{position:relative;overflow:hidden;border:0;border-radius:14px;color:#07142a;padding:4px 6px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:1px;cursor:pointer;line-height:1.15;box-shadow:0 4px 0 #0007;transition:transform .08s}
+.dz-b:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 #0007}.dz-b .ic{font-size:22px;line-height:1}.dz-b b{font-size:14px}.dz-b small{font-size:11px;opacity:1;font-weight:800;color:#06142c}
+.dz-b .k{position:absolute;left:7px;top:4px;font-size:10px;opacity:.55;font-weight:900}.dz-b:disabled{filter:grayscale(.9) brightness(.7);cursor:not-allowed}
+.dz-b.b0{background:linear-gradient(135deg,#00e5ff,#3b82f6)}.dz-b.b1{background:linear-gradient(135deg,#c084fc,#818cf8)}.dz-b.b2{background:linear-gradient(135deg,#4ade80,#2dd4bf)}.dz-b.b3{background:linear-gradient(135deg,#fb923c,#f43f5e)}
+.dz-b .uf{position:absolute;left:0;bottom:0;height:5px;background:#fffb}.dz-b.rdy{animation:dzGlow 1s ease-in-out infinite}
+.dz-o{display:flex;align-items:center;gap:8px;width:100%;margin:4px 0;padding:9px 10px;background:#0f1b45;color:#fff;border:2px solid #2b3c7a;border-radius:12px;text-align:left;font-size:14px;cursor:pointer;min-height:42px;transition:transform .08s,border-color .15s}
+.dz-o .lt{flex:none;width:24px;height:24px;border-radius:8px;background:#22337a;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px}
+.dz-o:active:not(:disabled){transform:scale(.98)}.dz-o:hover:not(:disabled){border-color:var(--c1)}.dz-o:disabled{cursor:default}
+.dz-o.right{border-color:#3ddc84;background:#0f3a2a}.dz-o.right .lt{background:#3ddc84;color:#012}.dz-o.wrong{border-color:#ff4d6a;background:#3a1020;animation:dzNo .35s}.dz-o.wrong .lt{background:#ff4d6a}
+.dz-intro{position:absolute;inset:0;z-index:30;display:flex;align-items:center;justify-content:center;gap:clamp(8px,3vw,40px);background:radial-gradient(circle,#000a,#000e);animation:dzIn .3s}.dz-intro.out{animation:dzOut .28s forwards}
+.dz-ic{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;font-size:13px;animation:dzSlideL .55s cubic-bezier(.2,.9,.3,1.2) both}.dz-ic.o{animation-name:dzSlideR}
+.dz-ic .im{height:clamp(64px,24vh,170px)}.dz-ic .im img{height:100%}.dz-ic b{font-size:clamp(14px,3.2vh,20px)}
+.dz-vs{font-size:clamp(34px,10vh,72px);font-weight:900;color:#ffd24a;text-shadow:0 0 22px #ffd24a,0 4px 0 #000;animation:dzVs .7s .25s cubic-bezier(.2,1.6,.4,1) both}
+.dz-hint{position:absolute;bottom:7%;left:5%;right:5%;text-align:center;font-weight:700;font-size:clamp(12px,2.6vh,16px);color:#e8f0ff;animation:dzIn .5s .6s both}
+@keyframes dzBob{50%{transform:translateY(-6px)}}@keyframes dzPulse{50%{opacity:.7;transform:scale(1.03)}}@keyframes dzGlow{50%{box-shadow:0 4px 0 #0007,0 0 18px #ffb347}}
+@keyframes dzPop{0%{opacity:0;transform:translate(-50%,-30%) scale(.5)}15%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}30%{transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-190%)}}
+@keyframes dzIn{from{opacity:0}}@keyframes dzOut{to{opacity:0}}@keyframes dzFin{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+@keyframes dzSlideL{from{opacity:0;transform:translateX(-80px)}}@keyframes dzSlideR{from{opacity:0;transform:translateX(80px)}}@keyframes dzVs{from{opacity:0;transform:scale(3)}}
+@keyframes dzBlink{50%{opacity:0}}@keyframes dzLow{50%{border-color:#ff4d6a;box-shadow:0 4px 0 #0008,0 0 18px #ff4d6a}}@keyframes dzNo{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@keyframes dzCl{from{transform:translateX(-120px)}to{transform:translateX(120vw)}}
+@media(hover:none){.dz-b .k{display:none}}
+@media(prefers-reduced-motion:reduce){.dz-bob,.dz-cl,.dz-b.rdy,.dz-box.low{animation:none}}
+@media(orientation:portrait) and (max-width:700px){#du{--sh:clamp(84px,min(26vh,38vw),190px)}.dz-sp.op{right:5%;top:20%}.dz-sp.pl{left:4%;bottom:16%}.dz-box{width:min(200px,47vw)}.dz-box.op{left:3%;top:3%}.dz-box.pl{right:3%;bottom:3%}.dz-bot{flex-direction:column;height:clamp(230px,50vh,400px)}#duAct{width:100%;flex:1}.dz-msg{flex:none;max-height:40%}.dz-top .ti{display:none}.dz-turn{font-size:11px}.dz-el .tn{display:none}}
+@media(max-height:480px){#du{--sh:clamp(70px,30vh,120px)}.dz-top{padding:3px 8px;font-size:12px}.dz-top button{min-height:28px;padding:3px 8px}.dz-box{padding:4px 8px 5px;width:min(240px,40vw)}.dz-nm{font-size:12px}.dz-hp{height:10px;margin:3px 0 2px}.dz-bot{padding:5px 8px;gap:6px;height:clamp(120px,42vh,200px)}.dz-msg{font-size:13px;padding:6px 8px}.dz-msg.q{font-size:12px}.dz-o{padding:5px 8px;font-size:12px;min-height:32px;margin:2px 0}.dz-mv{gap:5px;grid-auto-rows:minmax(40px,1fr)}.dz-b .ic{font-size:17px}.dz-b b{font-size:12px}#duAct{width:min(420px,58vw)}#duAct.qa{display:grid;grid-template-columns:1fr 1fr;gap:5px;align-content:start}#duAct.qa .dz-o{margin:0}.dz-box{width:min(230px,36vw)}.dz-ht{font-size:10px;min-height:13px}.dz-ult{margin-top:2px}.dz-ult .tk{height:6px}.dz-sp.op{right:27%;top:10%}.dz-sp.pl{left:26%;bottom:8%}.dz-ic .im{height:clamp(50px,22vh,120px)}}
+@media(max-height:480px) and (max-width:720px){.dz-sp.op{right:35%}.dz-sp.pl{left:23%}}
 </style></head><body>
 <div id="app"></div><div id="arena" class="hidden"></div><div id="modal" class="modal hidden"></div><div id="toast"></div><nav id="nav"></nav><div id="ld"><div class="lc"><div class="spin"></div><b id="ldt"></b><small id="lds"></small></div></div><div id="ldm"></div><div id="ls"></div>
 <script>
@@ -617,47 +664,135 @@ function duInit(mode,mu,ou,oname,host){
   duBuild();duFill();duLoop()}
 
 // ---- tampilan ----
+const DEL={Fire:['#ff7a33','🔥'],Nature:['#4ade80','🌿'],Earth:['#d4a15a','⛰️'],Electric:['#ffe04a','⚡'],Ice:['#7dd3fc','❄️'],Digital:['#c084fc','💾'],Wind:['#a7f3d0','🌪️']};
+const delC=t=>(DEL[t]||['#00e5ff','✨'])[0],delI=t=>(DEL[t]||['#00e5ff','✨'])[1];
 function duBuild(){let e=$('#du');if(e)e.remove();e=document.createElement('div');e.id='du';
-  const box=(p,cls)=>`<div class="du-box ${cls}"><div class="du-nm"><b id="du${p}n"></b><small id="du${p}l"></small></div><div class="du-hp"><i id="du${p}h"></i></div><div class="du-ht"><small id="du${p}t"></small></div><div class="du-ult"><i id="du${p}g"></i></div></div>`;
-  e.innerHTML=`<div class="du-top"><b>🥊 DUEL 1v1</b><span id="duRd"></span><button onclick="duQuit()">🏳 Menyerah</button></div>
-   <div class="du-fld" id="duFld">${box('o','op')}<div class="du-sp op" id="duOs">${hImg(DU.op.id,'height:100%')}</div><div class="du-sp me" id="duMs">${hImg(DU.me.id,'height:100%')}</div>${box('m','me')}</div>
-   <div class="du-bot"><div id="duMsg" class="du-msg"></div><div id="duAct"></div></div>`;
+  const box=(p,cls,f)=>`<div class="dz-box ${cls}" id="dz${p}b" style="--el:${delC(f.type)}"><div class="dz-nm"><b id="du${p}n"></b><small id="du${p}l"></small></div><div class="dz-hp"><i class="gh" id="du${p}x"></i><i id="du${p}h"></i></div><div class="dz-ht"><span id="du${p}t"></span><span class="dz-st" id="du${p}s"></span></div><div class="dz-ult"><em>ULT</em><span class="tk"><i id="du${p}g"></i></span></div></div>`;
+  const sp=(id,cls,f,s)=>`<div class="dz-sp ${cls}" id="${id}" style="--el:${delC(f.type)}"><div class="dz-pad"></div><div class="dz-hit"><div class="dz-bob">${hImg(f.id,'height:100%')}<div class="dz-bub"></div></div></div></div>`;
+  e.innerHTML=`<div class="dz-top"><b class="ti">🥊 DUEL 1v1</b><span class="rd" id="duRd"></span><span class="dz-turn" id="duTurn"></span><button onclick="sfxToggle();this.textContent=SFX.on?'🔊':'🔇'">${SFX.on?'🔊':'🔇'}</button><button class="sur" onclick="duQuit()">🏳 Menyerah</button></div>
+   <div class="dz-fld" id="duFld"><i class="dz-cl" style="top:9%;left:0"></i><i class="dz-cl" style="top:20%;left:0;animation-delay:-18s;transform:scale(.7)"></i>${box('o','op',DU.op)}${sp('duOs','op',DU.op)}${sp('duMs','pl',DU.me)}${box('m','pl',DU.me)}<div class="dz-fxl" id="duFx"></div></div>
+   <div class="dz-bot"><div id="duMsg" class="dz-msg"></div><div id="duAct"></div></div>`;
   document.body.appendChild(e);duRender()}
-function duRender(){const set=(p,f)=>{const pc=Math.max(0,f.hp/f.max*100),b=$('#du'+p+'h');if(!b)return;$('#du'+p+'n').textContent=f.name+(f.owner?' · '+f.owner:'');$('#du'+p+'l').textContent=' Lv'+f.lv+' '+f.type;
-    b.style.width=pc+'%';b.style.background=pc>50?'#3ddc84':pc>20?'#ffd24a':'#ff4d6a';$('#du'+p+'t').textContent=Math.max(0,Math.round(f.hp))+' / '+f.max+(f.sh?' 🛡':'')+(f.st>=2?' 🔥x'+f.st:'');$('#du'+p+'g').style.width=f.gauge+'%'};
+function duRender(){const set=(p,f)=>{const b=$('#du'+p+'h');if(!b)return;const pc=Math.max(0,f.hp/f.max*100);
+    $('#du'+p+'n').textContent=f.name+(f.owner?' · '+f.owner:'');$('#du'+p+'l').innerHTML=`<span class="dz-el" style="--el:${delC(f.type)}">${delI(f.type)}<span class="tn"> ${f.type}</span></span>Lv${f.lv}`;
+    b.style.width=pc+'%';b.style.background=pc>50?'linear-gradient(#5df09a,#27b868)':pc>20?'linear-gradient(#ffe27a,#f2b01e)':'linear-gradient(#ff7a92,#e0294a)';
+    const gx=$('#du'+p+'x');if(gx)gx.style.width=pc+'%';
+    $('#du'+p+'t').textContent=Math.max(0,Math.round(f.hp))+' / '+f.max;
+    $('#du'+p+'s').innerHTML=(f.sh?'<b class="p sh">🛡 Perisai</b>':'')+(f.st>=2?`<b class="p cb">🔥 Combo x${f.st}</b>`:'');
+    $('#du'+p+'g').style.width=f.gauge+'%';const bx=$('#dz'+p+'b');if(bx){bx.classList.toggle('low',pc>0&&pc<=25);bx.classList.toggle('ultr',f.gauge>=100)}
+    const sp=$(p==='m'?'#duMs':'#duOs');if(sp)sp.classList.toggle('sh',!!f.sh)};
   set('m',DU.me);set('o',DU.op);const r=$('#duRd');if(r)r.textContent='Ronde '+Math.ceil(DU.k/2)}
-function duSay(t,hold){return new Promise(res=>{const e=$('#duMsg');if(!e||!DU.on)return res();e.className='du-msg';e.textContent='';let i=0;clearInterval(DU.ty);
+function duTurn(meA){const t=$('#duTurn');if(t){t.className='dz-turn '+(meA?'atk':'def');t.textContent=meA?'⚔️ Giliranmu MENYERANG':'🛡 Lawan menyerang · bersiap BERTAHAN'}
+  ['#duMs','#duOs'].forEach((q,i)=>{const e=$(q);if(e)e.classList.toggle('act',(i===0)===meA)})}
+function duSay(t,hold){return new Promise(res=>{const e=$('#duMsg');if(!e||!DU.on)return res();e.className='dz-msg';e.textContent='';let i=0;clearInterval(DU.ty);
   DU.ty=setInterval(()=>{e.textContent=t.slice(0,++i);if(i>=t.length){clearInterval(DU.ty);setTimeout(res,hold==null?650:hold)}},16);
   e.onclick=()=>{clearInterval(DU.ty);e.textContent=t;setTimeout(res,150)}})}
 function duAnim(id,cls,ms){const e=$('#'+id);if(!e)return sleep(ms);e.classList.remove(cls);void e.offsetWidth;e.classList.add(cls);return sleep(ms)}
-function duPop(s,t,col,big){const f=$('#duFld');if(!f)return;const p=document.createElement('div');p.className='du-pop '+s;p.textContent=t;p.style.color=col||'#fff';if(big)p.style.fontSize='34px';f.appendChild(p);setTimeout(()=>p.remove(),1100)}
-async function duHit(s,dmg,crit){const f=s==='m'?DU.me:DU.op;sfx('hit');duAnim(s==='m'?'duMs':'duOs','hit',500);duPop(s,'-'+dmg,'#ff6b8a',crit);
-  f.hp=Math.max(0,f.hp-dmg);duRender();if(crit)duAnim('duFld','shake',350);await sleep(700)}
 
+// ---- efek animasi (semua elemen sementara, otomatis dibersihkan) ----
+const duRM=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+function duPos(s){const f=$('#duFld'),e=$(s==='m'?'#duMs':'#duOs');if(!f||!e)return{x:0,y:0,w:0,h:0};const a=f.getBoundingClientRect(),b=e.getBoundingClientRect();return{x:b.left-a.left+b.width/2,y:b.top-a.top+b.height/2,w:b.width,h:b.height}}
+function duEl(cls,css,html){const l=$('#duFx');if(!l||!DU.on)return null;const d=document.createElement('div');d.className='dz-f '+cls;d.style.cssText=css||'';if(html)d.innerHTML=html;l.appendChild(d);return d}
+function duAn(el,kf,opt){const ms=(opt&&opt.duration)||300;if(!el)return sleep(ms);let a;try{a=el.animate(kf,Object.assign({fill:'forwards',easing:'ease-out'},opt))}catch(e){setTimeout(()=>el.remove(),ms);return sleep(ms)}a.onfinish=()=>el.remove();a.oncancel=()=>el.remove();return a.finished.catch(()=>{})}
+function duBurst(x,y,col,n,spread,dur,size){if(duRM())n=Math.ceil(n/3);for(let i=0;i<n;i++){const a=Math.random()*6.283,d=spread*(.45+Math.random()*.55),s=(size||8)*(.6+Math.random()*.8);
+  const p=duEl('dz-p',`left:${x}px;top:${y}px;width:${s}px;height:${s}px;background:${col};box-shadow:0 0 ${s*1.5}px ${col}`);
+  duAn(p,[{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(calc(-50% + ${Math.cos(a)*d}px),calc(-50% + ${Math.sin(a)*d}px)) scale(.1)`,opacity:0}],{duration:dur*(.7+Math.random()*.5)})}}
+function duRing(x,y,col,size,dur,w){const r=duEl('dz-ring',`left:${x}px;top:${y}px;width:${size}px;height:${size}px;border:${w||4}px solid ${col};box-shadow:0 0 18px ${col},inset 0 0 14px ${col}`);
+  duAn(r,[{transform:'translate(-50%,-50%) scale(.1)',opacity:.95},{transform:'translate(-50%,-50%) scale(1)',opacity:0}],{duration:dur})}
+function duFlash(col,a,ms){const f=duEl('',`inset:0;background:${col}`);duAn(f,[{opacity:a},{opacity:0}],{duration:ms})}
+function duShake(k){const f=$('#duFld');if(!f||duRM())return;const a=8*k;try{f.animate([{transform:'none'},{transform:`translate(${-a}px,${a/2}px)`},{transform:`translate(${a}px,${-a/2}px)`},{transform:`translate(${-a/2}px,${-a/2}px)`},{transform:'none'}],{duration:340})}catch(e){}}
+function duPop(s,t,col,big,dy){const p=duPos(s),d=duEl('dz-pop'+(big?' big':''),`left:${p.x}px;top:${p.y-p.h*.28+(dy||0)}px;color:${col||'#fff'}`);if(!d)return;d.textContent=t;setTimeout(()=>d.remove(),1250)}
+function duSlash(x,y,col,big){const sz=big?150:110;[[-35,0],[35,90]].forEach(([rot,dl])=>{const s=duEl('dz-slash',`left:${x}px;top:${y}px;width:${sz}px;height:${sz}px;filter:drop-shadow(0 0 8px ${col}) drop-shadow(0 0 16px ${col})`);
+  duAn(s,[{transform:`translate(-50%,-50%) rotate(${rot-50}deg) scale(.4)`,opacity:0},{transform:`translate(-50%,-50%) rotate(${rot}deg) scale(1.1)`,opacity:1,offset:.35},{transform:`translate(-50%,-50%) rotate(${rot+25}deg) scale(1.25)`,opacity:0}],{duration:360,delay:dl})})}
+async function duProj(from,to,col,big,ult){const a=duPos(from),b=duPos(to),sz=big?46:30,o=duEl('dz-proj',`left:${a.x}px;top:${a.y}px;width:${sz}px;height:${sz}px;--c:${col}`);if(!o)return;
+  const dx=b.x-a.x,dy=b.y-a.y,dur=ult?520:420,f=$('#duFld');
+  const tr=setInterval(()=>{if(!DU.on||!o.isConnected||!f){clearInterval(tr);return}const r=o.getBoundingClientRect(),q=f.getBoundingClientRect();
+    const t=duEl('dz-tr',`left:${r.left-q.left+r.width/2}px;top:${r.top-q.top+r.height/2}px;width:${sz*.6}px;height:${sz*.6}px;background:${col}`);duAn(t,[{transform:'translate(-50%,-50%) scale(1)',opacity:.7},{transform:'translate(-50%,-50%) scale(.1)',opacity:0}],{duration:300})},40);
+  await duAn(o,[{transform:'translate(-50%,-50%) scale(.4)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1,offset:.12},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(1)`,opacity:1}],{duration:dur,easing:'cubic-bezier(.5,0,.8,.6)'});clearInterval(tr)}
+async function duUlt(mv,col,s){if(!DU.on)return;const a=duPos(s);
+  duAn(duEl('',`inset:0;background:#000`),[{opacity:0},{opacity:.6,offset:.2},{opacity:.6,offset:.8},{opacity:0}],{duration:900});
+  const ray=duEl('',`left:${a.x}px;top:${a.y}px;width:${a.w*3}px;height:${a.w*3}px;border-radius:50%;background:repeating-conic-gradient(from 0deg,${col}aa 0 6deg,#0000 6deg 20deg);-webkit-mask:radial-gradient(circle,#000 0,#0000 68%);mask:radial-gradient(circle,#000 0,#0000 68%)`);
+  duAn(ray,[{transform:'translate(-50%,-50%) scale(.2) rotate(0deg)',opacity:0},{transform:'translate(-50%,-50%) scale(1) rotate(40deg)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.3) rotate(90deg)',opacity:0}],{duration:900});
+  const bn=duEl('dz-ban',`--c:${col}`);if(bn){bn.textContent=mv.ic+' '+String(mv.n).toUpperCase()+'!';duAn(bn,[{transform:'translateX(-60%) scale(.8)',opacity:0},{transform:'translateX(0) scale(1)',opacity:1,offset:.25},{transform:'translateX(0) scale(1.06)',opacity:1,offset:.8},{transform:'translateX(40%) scale(1.1)',opacity:0}],{duration:900})}
+  duBurst(a.x,a.y,col,18,a.w*1.2,700,10);await sleep(780)}
+// animasi serangan sesuai jenis jurus: basic=tebasan, shot/heal=tembakan, dash=melesat, aoe/shield=gelombang area
+async function duAttackFx(s,mv,eff,crit,okA){if(!DU.on)return;const t=s==='m'?'o':'m',A=s==='m'?DU.me:DU.op,col=delC(A.type),el=$(s==='m'?'#duMs':'#duOs');
+  if(!el)return sleep(500);const dir=s==='m'?1:-1,a=duPos(s),b=duPos(t),dx=b.x-a.x,dy=b.y-a.y,ult=!!mv.ult,k=mv.k,big=ult||mv.pw>=2;
+  const mvA=(kf,d,eas)=>{try{el.animate(kf,{duration:d,easing:eas||'ease-in-out'})}catch(e){}return sleep(d)};
+  if(ult)await duUlt(mv,col,s);if(!DU.on)return;sfx(ult?'ult':'cast');
+  if(k==='basic'){
+    await mvA([{transform:'none'},{transform:`translate(${-16*dir}px,-4px) scale(.96)`}],140,'ease-out');
+    try{el.animate([{transform:`translate(${-16*dir}px,-4px) scale(.96)`},{transform:`translate(${dx*.78}px,${dy*.78}px) scale(1.1)`,offset:.55},{transform:'none'}],{duration:480,easing:'ease-in-out'})}catch(e){}
+    await sleep(230);duSlash(b.x,b.y,col,big);duBurst(b.x,b.y,'#fff',6,60,380,6);await sleep(250)}
+  else if(k==='dash'){
+    await mvA([{transform:'none'},{transform:`translate(${-12*dir}px,6px) scale(.94,1.04)`}],120,'ease-out');
+    try{el.animate([{transform:`translate(${-12*dir}px,6px)`},{transform:`translate(${dx*1.12}px,${dy*1.12}px) scale(1.06)`,offset:.5},{transform:'none'}],{duration:560,easing:'cubic-bezier(.3,0,.2,1)'})}catch(e){}
+    const img=el.querySelector('img'),src=img?img.src:'';
+    for(let i=0;i<5;i++){setTimeout(()=>{if(!DU.on)return;const f=.1+i*.2,g=duEl('',`left:${a.x+dx*f}px;top:${a.y+dy*f}px;width:${a.w}px;height:${a.h}px;opacity:.6;filter:drop-shadow(0 0 10px ${col}) brightness(1.6)`,src?`<img src="${src}" style="height:100%;${s==='o'?'transform:scaleX(-1)':''}">`:'');duAn(g,[{transform:'translate(-50%,-50%)',opacity:.6},{transform:'translate(-50%,-50%) scale(.9)',opacity:0}],{duration:320})},60+i*45)}
+    await sleep(300);duRing(b.x,b.y,col,150,320,4);duBurst(b.x,b.y,col,10,90,420,8);duBurst(b.x,b.y,'#fff',6,60,360,5);await sleep(320)}
+  else if(k==='shot'||k==='heal'){
+    await mvA([{transform:'none'},{transform:`scale(1.1) translateY(-6px)`},{transform:'none'}],220);duRing(a.x,a.y,col,a.w*.9,300,4);
+    await duProj(s,t,col,big,ult);duRing(b.x,b.y,col,big?200:140,380,4);duBurst(b.x,b.y,col,big?16:10,big?120:80,450,9)}
+  else{ // aoe / shield: lompat, lalu gelombang tanah menyapu ke lawan + hujan partikel
+    duRing(a.x,a.y,col,a.w*1.1,320,4);await mvA([{transform:'none'},{transform:'translateY(-26px) scale(1.06)'},{transform:'none'}],340,'cubic-bezier(.3,0,.4,1)');
+    const w=duEl('dz-wave',`left:${a.x}px;top:${a.y+a.h*.38}px;width:${a.w*.9}px;height:${a.w*.32}px;border:5px solid ${col};box-shadow:0 0 18px ${col},inset 0 0 12px ${col}`);
+    duAn(w,[{transform:'translate(-50%,-50%) scale(.5)',opacity:.95},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy+b.h*.3}px)) scale(${big?2.4:1.7})`,opacity:.9,offset:.8},{transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy+b.h*.3}px)) scale(${big?3.2:2.2})`,opacity:0}],{duration:520,easing:'ease-in'});
+    duFlash(col,big?.28:.16,260);await sleep(430);
+    for(let i=0;i<(duRM()?4:10);i++){const px=b.x+(Math.random()-.5)*b.w*.9,sz=8+Math.random()*8,p=duEl('dz-p',`left:${px}px;top:${b.y-b.h*.9}px;width:${sz}px;height:${sz*1.6}px;background:${col};box-shadow:0 0 12px ${col};border-radius:40% 40% 50% 50%`);
+      duAn(p,[{transform:'translate(-50%,-50%)',opacity:0},{opacity:1,offset:.15},{transform:`translate(-50%,${b.h*1.1}px)`,opacity:.9}],{duration:360,delay:i*28,easing:'ease-in'})}
+    duRing(b.x,b.y+b.h*.3,col,big?260:180,420,5);await sleep(380)}}
+async function duHit(s,dmg,crit){if(!DU.on)return;const f=s==='m'?DU.me:DU.op,atk=s==='m'?DU.op:DU.me,col=delC(atk.type);sfx('hit');vib(crit?[30,30,60]:20);
+  const p=duPos(s),el=$(s==='m'?'#duMs':'#duOs'),dir=s==='m'?-1:1,h=el&&el.querySelector('.dz-hit');
+  duBurst(p.x,p.y,'#fff',crit?14:8,crit?110:70,420,crit?9:6);duBurst(p.x,p.y,col,crit?16:10,crit?130:90,520,9);duRing(p.x,p.y,col,crit?200:130,380,4);
+  if(h){try{h.animate([{filter:'none',transform:'none'},{filter:'brightness(3) saturate(0)',transform:`translateX(${dir*22}px) scale(.96)`,offset:.2},{filter:'none',transform:`translateX(${-dir*7}px)`,offset:.5},{filter:'none',transform:'none'}],{duration:crit?620:480,easing:'ease-out'})}catch(e){}}
+  duPop(s,'-'+dmg,crit?'#ffb340':'#ff6b8a',crit);if(crit)duPop(s,'⚡ KRITIS!','#ffd24a',false,-38);
+  f.hp=Math.max(0,f.hp-dmg);duRender();duShake(crit?1.7:1);if(crit)duFlash('#fff',.35,200);await sleep(crit?900:700)}
+function duBlockFx(s,perfect){if(!DU.on)return;const p=duPos(s),g=duEl('dz-guard',`left:${p.x}px;top:${p.y}px;width:${p.w*1.1}px;height:${p.h*1.1}px`);
+  duAn(g,[{transform:'translate(-50%,-50%) scale(.5)',opacity:0},{transform:'translate(-50%,-50%) scale(1)',opacity:1,offset:.3},{transform:'translate(-50%,-50%) scale(1.12)',opacity:0}],{duration:520});
+  duPop(s,perfect?'🛡 TANGKIS SEMPURNA!':'🛡 Tangkis!','#7de3ff',false,-64)}
+function duHealFx(s){if(!DU.on)return;const p=duPos(s);sfx('buff');duRing(p.x,p.y,'#3ddc84',p.w*1.1,520,4);
+  for(let i=0;i<(duRM()?3:9);i++){const x=p.x+(Math.random()-.5)*p.w*.8,e=duEl('',`left:${x}px;top:${p.y+p.h*.3}px;font-size:${14+Math.random()*12}px;color:#3ddc84;text-shadow:0 0 8px #3ddc84;font-weight:900`,'✚');
+    duAn(e,[{transform:'translate(-50%,0)',opacity:0},{opacity:1,offset:.2},{transform:`translate(-50%,${-p.h*.8}px)`,opacity:0}],{duration:900,delay:i*70})}}
+function duShieldFx(s){if(!DU.on)return;const p=duPos(s);sfx('buff');duRing(p.x,p.y,'#7de3ff',p.w*1.2,520,5);duBurst(p.x,p.y,'#7de3ff',10,p.w*.7,500,7)}
+async function duKO(s){if(!DU.on)return;const el=$(s==='m'?'#duMs':'#duOs'),h=el&&el.querySelector('.dz-hit'),dir=s==='m'?-1:1,p=duPos(s);sfx('kill');
+  if(h){try{h.animate([{transform:'none',opacity:1},{transform:`translate(${dir*14}px,6px) rotate(${dir*14}deg)`,opacity:1,offset:.25},{transform:`translate(${dir*30}px,${p.h*.3}px) rotate(${dir*80}deg)`,opacity:0}],{duration:1000,easing:'ease-in',fill:'forwards'})}catch(e){}}
+  duBurst(p.x,p.y,'#ffd24a',14,p.w*.9,800,9);duShake(2);duFlash('#fff',.3,260);await sleep(1000)}
+function duConfetti(){if(!DU.on)return;const f=$('#duFld');if(!f)return;const W=f.clientWidth,H=f.clientHeight,cols=['#ffd24a','#ff4d6a','#00e5ff','#3ddc84','#c084fc','#fff'];
+  for(let i=0;i<(duRM()?10:38);i++){const e=duEl('dz-conf',`left:${Math.random()*W}px;top:-20px;background:${cols[i%6]}`);duAn(e,[{transform:'translateY(0) rotate(0deg)',opacity:1},{transform:`translate(${(Math.random()-.5)*120}px,${H+30}px) rotate(${360+Math.random()*540}deg)`,opacity:.9}],{duration:1500+Math.random()*1300,delay:Math.random()*500,easing:'ease-in'})}
+  try{$('#duMs').animate([{transform:'none'},{transform:'translateY(-26px)'},{transform:'none'}],{duration:420,iterations:3})}catch(e){}}
+async function duIntro(){const f=$('#du');if(!f||!DU.on)return;const m=DU.me,o=DU.op,tm=DTM(m.type,o.type);
+  const hint=tm>1?`${delI(m.type)} ${m.type} unggul atas ${delI(o.type)} ${o.type}! Damage-mu ×1.3`:tm<1?`${delI(o.type)} ${o.type} unggul atas ${delI(m.type)} ${m.type}. Jawab cepat untuk menutup celah!`:'Elemen seimbang. Kecepatan menjawab jadi penentu!';
+  const card=(u,c)=>`<div class="dz-ic ${c}" style="--el:${delC(u.type)}"><div class="im">${hImg(u.id,'height:100%')}</div><b>${esc(u.name)}</b><span class="dz-el" style="--el:${delC(u.type)}">${delI(u.type)} ${u.type} · Lv${u.lv}</span><small>${esc(u.owner||'')}</small></div>`;
+  const ov=document.createElement('div');ov.className='dz-intro';ov.innerHTML=card(m,'m')+'<div class="dz-vs">VS</div>'+card(o,'o')+`<div class="dz-hint">${hint}</div>`;f.appendChild(ov);let sk=0;ov.onclick=()=>sk=1;sfx('ann');
+  for(let i=0;i<16&&!sk&&DU.on;i++)await sleep(100);ov.classList.add('out');await sleep(280);ov.remove()}
 // ---- jurus & soal ----
-function duPickMove(){return new Promise(res=>{const m=DU.me,e=$('#duAct');if(!e)return res(0);$('#duMsg').className='du-msg';$('#duMsg').textContent='Pilih jurusmu! (12 detik)';
-  e.innerHTML='<div class="du-mv">'+m.mv.map((v,i)=>{const off=(i>0&&!v.ult&&m.cd[i]>0)||(v.ult&&m.gauge<100),sub=v.ult?(m.gauge<100?'ULT '+m.gauge+'%':'SIAP!'):(i&&m.cd[i]>0?'CD '+m.cd[i]:(KL[v.k]||'Dasar'));
-    return `<button class="du-b b${i}" ${off?'disabled':''} data-i="${i}"><b>${v.ic} ${esc(v.n)}</b><small>${sub}</small></button>`}).join('')+'</div>';
+function duPickMove(){return new Promise(res=>{const m=DU.me,e=$('#duAct');if(!e)return res(0);const mg=$('#duMsg');mg.className='dz-msg';
+  mg.innerHTML='<span class="dz-chip pick">🎯 PILIH JURUSMU</span> <b id="duCd">12</b> detik<div class="dz-tm"><i id="duTm" style="transition:transform 1s linear"></i></div><small class="mut">Jurus lebih kuat = soal lebih sulit. ULT butuh bar penuh.</small>';
+  e.classList.remove('qa');
+  e.innerHTML='<div class="dz-mv">'+m.mv.map((v,i)=>{const off=(i>0&&!v.ult&&m.cd[i]>0)||(v.ult&&m.gauge<100),sub=v.ult?(m.gauge<100?'ULT '+m.gauge+'%':'SIAP!'):(i&&m.cd[i]>0?'CD '+m.cd[i]+' ronde':(KL[v.k]||'Dasar')+' · '+'★'.repeat(v.d));
+    return `<button class="dz-b b${i}${v.ult&&!off?' rdy':''}" ${off?'disabled':''} data-i="${i}"><span class="k">${i+1}</span><span class="ic">${v.ic}</span><b>${esc(v.n)}</b><small>${sub}</small>${v.ult?`<i class="uf" style="width:${m.gauge}%"></i>`:''}</button>`}).join('')+'</div>';
   let done=0,left=12;const pick=i=>{if(done)return;done=1;clearInterval(tm);e.innerHTML='';res(i)};
-  e.querySelectorAll('button').forEach(b=>b.onclick=()=>pick(+b.dataset.i));const tm=setInterval(()=>{if(--left<=0||!DU.on)pick(0)},1000)})}
+  e.querySelectorAll('button').forEach(b=>b.onclick=()=>pick(+b.dataset.i));
+  const tm=setInterval(()=>{if(--left<=0||!DU.on){pick(0);return}const c=$('#duCd'),t=$('#duTm');if(c)c.textContent=left;if(t){t.style.transform='scaleX('+(left/12)+')';t.className=left<=3?'low':left<=6?'mid':''}},1000);
+  requestAnimationFrame(()=>{const t=$('#duTm');if(t)t.style.transform='scaleX(.9167)'})})}
 async function duAsk(d,role){let tk=DU.pool[d].shift();
   if(!tk){const mg=$('#duMsg');if(mg)mg.textContent='⚙️ Menyiapkan soal...';const r=await call('rtq',{diff:d},1);if(!r||!DU.on)return{ok:false,ms:99999};tk=r.ticket}
   duFill(d);
   return new Promise(res=>{const T=[0,15,20,25][d],t0=performance.now(),msg=$('#duMsg'),act=$('#duAct');if(!msg||!act)return res({ok:false,ms:99999});
-    msg.className='du-msg q';msg.innerHTML=`<span class="du-chip ${role}">${role==='atk'?'⚔️ SERANG!':'🛡 BERTAHAN!'}</span> <small class="mut">${esc(tk.topic||'')}</small><div class="du-tm"><i id="duTm"></i></div><div class="du-qt">${esc(tk.question)}</div>`;
-    act.innerHTML=tk.options.map((o,i)=>`<button class="du-o" data-i="${i}">${esc(o)}</button>`).join('');
+    msg.className='dz-msg q';msg.innerHTML=`<span class="dz-chip ${role}">${role==='atk'?'⚔️ SERANG!':'🛡 BERTAHAN!'}</span> <small class="mut">${esc(tk.topic||'')}</small><div class="dz-tm"><i id="duTm"></i></div><div class="dz-qt">${esc(tk.question)}</div>`;
+    act.classList.add('qa');act.innerHTML=tk.options.map((o,i)=>`<button class="dz-o" data-i="${i}"><span class="lt">${'ABCD'[i]||i+1}</span><span>${esc(o)}</span></button>`).join('');
     let done=0,iv=0;const fin=n=>{if(done)return;done=1;clearInterval(iv);const ms=performance.now()-t0,ok=n>=0&&fnv_(tk.salt+'|'+tk.options[n])===tk.v;
       act.querySelectorAll('button').forEach((b,i)=>{b.disabled=true;if(fnv_(tk.salt+'|'+tk.options[i])===tk.v)b.classList.add('right');else if(i===n)b.classList.add('wrong')});
-      call('answer',{ticketId:tk.ticketId,choice:n},1);sfx(ok?'ok':'tick');setTimeout(()=>res({ok:ok,ms:ms}),950)};
+      call('answer',{ticketId:tk.ticketId,choice:n},1);sfx(ok?'ok':'bad');setTimeout(()=>res({ok:ok,ms:ms}),950)};
     act.querySelectorAll('button').forEach(b=>b.onclick=()=>fin(+b.dataset.i));
-    iv=setInterval(()=>{if(!DU.on){clearInterval(iv);return}const l=1-(performance.now()-t0)/1000/T,e=$('#duTm');if(e)e.style.width=Math.max(0,l*100)+'%';if(l<=0)fin(-1)},100)})}
+    iv=setInterval(()=>{if(!DU.on){clearInterval(iv);return}const l=1-(performance.now()-t0)/1000/T,e=$('#duTm');if(e){e.style.transform='scaleX('+Math.max(0,l)+')';e.className=l<.25?'low':l<.5?'mid':''}if(l<=0)fin(-1)},100)})}
 const duAiAns=d=>({ok:Math.random()<[0,.82,.66,.5][d],ms:2500+Math.random()*9000});
 function duAiMove(A){const c=[0,0];if(A.gauge>=100)c.push(3,3,3);[1,2].forEach(i=>{if(A.cd[i]<=0)c.push(i)});return c[Math.floor(Math.random()*c.length)]}
 
 // ---- satu pertukaran: penyerang pilih jurus -> dua pemain jawab soal -> hitung hasil ----
 async function duExchange(){
   const meA=DU.att==='me',A=meA?DU.me:DU.op,D=meA?DU.op:DU.me;let mi=0;
-  A.cd=A.cd.map(c=>Math.max(0,c-1));duRender();
+  A.cd=A.cd.map(c=>Math.max(0,c-1));duRender();duTurn(meA);
   if(meA){mi=await duPickMove();duSend({t:'dmv',k:DU.k,mi:mi})}
   else if(DU.mode==='ai')mi=duAiMove(A);
   else{await duSay(A.name+' memilih jurus...',0);const m=await duWait('mv'+DU.k,26000);mi=m?clamp(m.mi|0,0,3):0}
@@ -667,7 +802,7 @@ async function duExchange(){
   const T=[0,15,20,25][mv.d],opP=DU.mode==='ai'?Promise.resolve(duAiAns(mv.d)):duWait('ans'+DU.k,(T+8)*1000);
   const mine=await duAsk(mv.d,meA?'atk':'def');if(!DU.on)return;
   DU.me.ok=mine.ok;if(mine.ok)DU.okN++;else DU.badN++;duSend({t:'dans',k:DU.k,ok:mine.ok?1:0,ms:Math.round(mine.ms)});
-  const ac=$('#duAct');if(ac)ac.innerHTML='';const mg=$('#duMsg');if(mg){mg.className='du-msg';mg.textContent='Menunggu '+DU.op.owner+' menjawab...'}
+  const ac=$('#duAct');if(ac)ac.innerHTML='';const mg=$('#duMsg');if(mg){mg.className='dz-msg';mg.textContent='Menunggu '+DU.op.owner+' menjawab...'}
   let th=await opP;th=th?{ok:!!th.ok,ms:+th.ms||99999}:{ok:false,ms:99999};if(!DU.on)return;
   await duResolve(A,D,mv,mi,meA?mine:th,meA?th:mine,meA)}
 async function duResolve(A,D,mv,mi,ar,dr,meA){const aS=meA?'m':'o',dS=meA?'o':'m';
@@ -678,17 +813,17 @@ async function duResolve(A,D,mv,mi,ar,dr,meA){const aS=meA?'m':'o',dS=meA?'o':'m
   [[A,ar],[D,dr]].forEach(([f,r])=>{f.st=r.ok?f.st+1:0;f.gauge=Math.min(100,f.gauge+(r.ok?25:10))});
   await duSay(ar.ok?(crit?'Jawaban kilat! Serangan kritis!':'Jawaban benar! Serangan penuh!'):'Jawaban salah... serangan melemah.',500);if(!DU.on)return;
   await duSay(dr.ok?(dr.ms<4000?D.name+' menangkis dengan sempurna!':D.name+' bertahan dengan jawaban benar!'):D.name+' gagal bertahan!',500);if(!DU.on)return;
-  await duAnim(meA?'duMs':'duOs',meA?'lm':'lo',380);await duHit(dS,dmg,crit);
+  await duAttackFx(aS,mv,eff,crit,ar.ok);if(dr.ok)duBlockFx(dS,dr.ms<4000);await duHit(dS,dmg,crit);
   if(eff>1)await duSay('Sangat efektif!',450);else if(eff<1)await duSay('Kurang efektif...',450);
-  if(mv.k==='heal'){const h=Math.round(A.max*(ar.ok?.18:.08));A.hp=Math.min(A.max,A.hp+h);duPop(aS,'+'+h,'#3ddc84');duRender();await duSay(A.name+' memulihkan HP!',450)}
-  if(mv.k==='shield'&&ar.ok){A.sh=1;duRender();await duSay(A.name+' memasang perisai!',450)}
+  if(mv.k==='heal'){const h=Math.round(A.max*(ar.ok?.18:.08));A.hp=Math.min(A.max,A.hp+h);duHealFx(aS);duPop(aS,'+'+h,'#3ddc84');duRender();await duSay(A.name+' memulihkan HP!',450)}
+  if(mv.k==='shield'&&ar.ok){A.sh=1;duRender();duShieldFx(aS);await duSay(A.name+' memasang perisai!',450)}
   if(A.st>=3){duRender();await duSay('🔥 Combo x'+A.st+'!',400)}
-  duRender();if(D.hp<=0){DU.over=1;DU.win=D===DU.op?1:0}}
-async function duLoop(){await duAnim('duFld','in',10);await duSay('Duel dimulai! '+DU.me.name+' VS '+DU.op.name+'!',700);
+  duRender();if(D.hp<=0){DU.over=1;DU.win=D===DU.op?1:0;await duKO(dS)}}
+async function duLoop(){await duAnim('duFld','in',10);await duIntro();await duSay('Duel dimulai! '+DU.me.name+' VS '+DU.op.name+'!',700);
   while(DU.on&&!DU.over){await duExchange();if(!DU.on)return;if(DU.over)break;DU.k++;DU.att=DU.att==='me'?'op':'me';
     if(DU.k>30){DU.over=1;DU.win=DU.me.hp/DU.me.max>=DU.op.hp/DU.op.max?1:0;await duSay('Waktu habis! Pemenang ditentukan dari sisa HP.',900)}}
   if(DU.on)duFinish(DU.win)}
-async function duFinish(win){if(DU.fin)return;DU.fin=1;DU.over=1;sfx(win?'win':'lose');
+async function duFinish(win){if(DU.fin)return;DU.fin=1;DU.over=1;sfx(win?'win':'lose');if(win)duConfetti();
   await duSay(win?DU.op.name+' tumbang! Kamu menang! 🏆':DU.me.name+' tumbang... Kamu kalah 💀',1000);
   const st={r:Math.ceil(DU.k/2),ok:DU.okN,bad:DU.badN},sid=DU.r.sid;duClose();mod('<h3>⚙️ Menghitung hasil...</h3>');
   const r=await call('rtend',{sid:sid,win:win?true:false});
@@ -697,6 +832,10 @@ async function duFinish(win){if(DU.fin)return;DU.fin=1;DU.over=1;sfx(win?'win':'
   if(r.invalid){mod(`<h2>${r.invalid}</h2><br>${rvBtn()}<button class="btn" onclick="closeM();paint()">OK</button>`);return}
   const x=r.result;
   mod(`<div class="big">${x.win?'🏆':'💀'}</div><h2 style="color:${x.win?'var(--ok)':'#ff6b8a'}">${x.win?'MENANG!':'KALAH'}</h2><div class="gain">+${x.xp} XP &nbsp; +${x.coin} COIN</div><p>RANK POINT <b>${x.rp>0?'+':''}${x.rp}</b><br>${x.rank}</p><p class="mut">🥊 ${st.r} ronde · ✅ ${st.ok} benar · ❌ ${st.bad} salah</p><br>${rvBtn()}<button class="btn" onclick="closeM();paint()">LANJUT</button>`)}
+function duKey(e){if(!DU.on||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;const ae=document.activeElement;if(ae&&/INPUT|TEXTAREA/.test(ae.tagName))return;const a=$('#duAct');if(!a)return;
+  const k=e.key.toLowerCase();let i=-1;if(k.length===1&&'1234'.includes(k))i=+k-1;else if(k.length===1&&'abcd'.includes(k))i=k.charCodeAt(0)-97;if(i<0)return;
+  const b=a.querySelectorAll('button')[i];if(b&&!b.disabled){e.preventDefault();b.click()}}
+document.addEventListener('keydown',duKey);
 function duClose(){DU.on=0;clearInterval(DU.ty);const e=$('#du');if(e)e.remove();if(DU.mode==='net'){setTimeout(()=>mpReset(),1200)}}
 function duQuit(){if(!DU.on||DU.fin)return;if(!confirm('Menyerah? Kamu dianggap kalah.'))return;if(DU.mode==='net')duSend({t:'dbye'});duFinish(0)}
 function duPeerLeft(){if(!DU.on||DU.fin)return;DU.fin=1;DU.over=1;duClose();mod('<h3>🔌 Lawan keluar</h3><p class="mut">Duel dihentikan tanpa reward.</p><button class="btn" onclick="closeM();paint()">OK</button>')}
