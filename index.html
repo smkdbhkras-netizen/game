@@ -111,7 +111,7 @@ input,select,textarea{width:100%;padding:11px;margin:5px 0;background:#0a1230;bo
 #gi{display:grid;grid-template-columns:repeat(3,28px);gap:3px}#gi i{font-style:normal;width:28px;height:28px;display:grid;place-items:center;background:#0a1230e6;border:1px solid #ffd24a88;border-radius:7px;font-size:15px}.opt:disabled{opacity:.4}
 #dead{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#0006;backdrop-filter:grayscale(1);-webkit-backdrop-filter:grayscale(1);color:#fff;font-size:24px;pointer-events:none}#dead span{font-size:52px;font-weight:900;color:var(--gold)}#dead small{font-size:14px;color:var(--mut)}
 /* ===== QUICK ANSWER (tanpa pause) ===== */
-#qa{position:absolute;left:50%;transform:translateX(-50%);top:calc(70px + env(safe-area-inset-top));width:min(280px,56vw);opacity:.94;background:#0a1230d9;border:2px solid var(--c1);border-radius:14px;padding:8px 10px;color:#fff;box-shadow:0 0 18px #00e5ff66;z-index:5;font-size:12px}
+#qa{position:absolute;right:calc(206px + env(safe-area-inset-right));bottom:calc(26px + env(safe-area-inset-bottom));max-height:calc(100% - 64px - env(safe-area-inset-top));overflow:auto;width:min(270px,36vw);opacity:.94;background:#0a1230d9;border:2px solid var(--c1);border-radius:14px;padding:8px 10px;color:#fff;box-shadow:0 0 18px #00e5ff66;z-index:5;font-size:12px}
 #qa small{color:var(--c1);font-weight:800}#qa pre{margin:4px 0;font-size:11px;max-height:90px;overflow:auto;white-space:pre-wrap}
 #qa .qb{height:5px;border-radius:3px;background:#ffffff22;overflow:hidden;margin-bottom:4px}#qa .qb i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ffd24a,#ff4d6d)}
 #cb{position:absolute;left:calc(26px + env(safe-area-inset-left));bottom:calc(190px + env(safe-area-inset-bottom));padding:4px 12px;border-radius:16px;background:linear-gradient(90deg,#ff7a18,#ff2bd6);color:#fff;font-weight:900;font-size:15px;box-shadow:0 0 16px #ff7a18aa;pointer-events:none;z-index:5}
@@ -183,7 +183,7 @@ body{min-height:100vh;min-height:100dvh}
  #b3{width:56px;height:56px;right:calc(24px + env(safe-area-inset-right));bottom:calc(102px + env(safe-area-inset-bottom))}
  #cb{bottom:calc(138px + env(safe-area-inset-bottom));left:calc(18px + env(safe-area-inset-left))}
  .p{width:30px}#sb span{font-size:13px;padding:0 9px}#prs{gap:14px}
- #qa{top:calc(46px + env(safe-area-inset-top));width:min(300px,46vw);padding:5px 8px}#qa pre{max-height:50px;font-size:10px;margin:2px 0}#qa .opt{padding:4px 6px;margin:2px 0;font-size:11px}
+ #qa{padding:5px 8px}#qa pre{max-height:50px;font-size:10px;margin:2px 0}#qa .opt{padding:4px 6px;margin:2px 0;font-size:11px}
  #ann{top:20%}#dead{font-size:18px}#dead span{font-size:38px}
  #gb{gap:3px}#gi{grid-template-columns:repeat(6,24px)}#gi i{width:24px;height:24px;font-size:13px}
  /* --- modal, pilih hero --- */
@@ -195,7 +195,11 @@ body{min-height:100vh;min-height:100dvh}
  .stage{height:min(230px,44vh)}.np{padding:2px 30px;margin-top:0}.np h2{font-size:16px}.sd{padding:5px 2px}.sd span{font-size:20px}.ls,.rs{gap:6px}
  #nav button{padding:3px 0}#nav button b{font-size:16px}body{padding-bottom:54px}
 }
-@media(max-height:360px){#joy{width:104px;height:104px}#knob{left:27px;top:27px}#b3{bottom:calc(94px + env(safe-area-inset-bottom))}#b2{bottom:calc(68px + env(safe-area-inset-bottom))}#qa{width:min(260px,42vw)}}
+@media(max-height:360px){#joy{width:104px;height:104px}#knob{left:27px;top:27px}#b3{bottom:calc(94px + env(safe-area-inset-bottom))}#b2{bottom:calc(68px + env(safe-area-inset-bottom))}#qa{width:min(230px,32vw)}}
+/* Quick Answer: tepat di samping tombol skill (tidak menutupi hero di tengah layar) */
+@media(max-width:640px){#qa{right:calc(180px + env(safe-area-inset-right))}}
+@media(max-height:480px){#qa{top:auto;right:calc(162px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom));width:min(210px,29vw)}}
+@media(orientation:portrait){#qa{top:auto;right:calc(10px + env(safe-area-inset-right));bottom:calc(214px + env(safe-area-inset-bottom));width:min(300px,92vw)}}
 
 /* ===== LOADING / JEDA ===== */
 #ld{position:fixed;inset:0;z-index:40;display:none;align-items:center;justify-content:center;touch-action:none}
