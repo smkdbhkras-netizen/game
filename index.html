@@ -616,7 +616,7 @@ function heroM(id){const h=H(id),l=S.d.owned[id];
 async function upg(id){const r=await call('upgrade',{heroId:id});if(!r)return;S.d.user=r.user;S.d.owned[id]=r.level;heroM(id);paint()}
 
 // ===== BATTLE REALTIME (MOBA) =====
-// Hero digerakkan sendiri (joystick / WASD). Basic Attack bebas; Skill & Ultimate butuh jawab soal logika (game berhenti sejenak).
+// Hero digerakkan sendiri (joystick / WASD). Basic Attack bebas; Skill & Ultimate butuh jawab soal Quick Answer (game tidak berhenti).
 const RT={on:0};
 const W=3600,HW=2200; // peta diperbesar (sebelumnya 1600x900)
 const ROLE={Attack:{r:170,s:210},Support:{r:180,s:200},Tank:{r:85,s:170},Speed:{r:95,s:250},Control:{r:190,s:200},Controller:{r:190,s:200},Master:{r:150,s:220}};
@@ -680,7 +680,7 @@ function bTab(t){S.bt=t;sfx('tick');paint()}
 function howM(){mod(`<h3>❓ CARA MAIN</h3>
   <div class="btHow"><b class="t">🎯 Tujuan</b>Pilih mode lalu pilih hero. 2 temanmu dikendalikan AI. Push 3 lane (atas, tengah, bawah), hancurkan turret lalu crystal lawan dalam 3 menit. Hero gugur? Tunggu respawn.</div>
   <div class="btHow"><b class="t">🕹 Kontrol</b>Gerakkan hero dengan joystick. <b>Geser tombol skill ke arah musuh</b> untuk membidik, lepas untuk mengaktifkan (tap saja = bidik otomatis). Putar HP ke <b>landscape</b> untuk pengalaman terbaik.</div>
-  <div class="btHow"><b class="t">⚡ Skill = jawab soal</b><b>Skill 1 & 2</b>: Quick Answer, soal singkat 3 pilihan tanpa menghentikan game. Benar = skill penuh, salah/waktu habis = skill tetap keluar tapi lemah (60%). <b>Ultimate</b>: soal penuh, game berhenti sebentar (saat Mabar, game tidak berhenti).</div>
+  <div class="btHow"><b class="t">⚡ Skill = jawab soal</b><b>Skill 1, 2 & Ultimate</b>: Quick Answer, soal singkat 3 pilihan tanpa menghentikan game. Benar = skill penuh, salah/waktu habis = skill tetap keluar tapi lemah (60%). Ultimate memberi waktu menjawab paling lama (10 detik).</div>
   <div class="btHow"><b class="t">🔥 Combo</b>Jawab benar berturut-turut: damage naik dan cooldown turun. Salah hanya mereset combo.</div>
   <div class="btHow"><b class="t">📖 Review & 🔁 Ulangan</b>Soal yang salah dibahas di <b>REVIEW</b> akhir match (bonus XP) dan muncul lagi sebagai <b>🔁 ULANGAN</b> di match berikutnya sampai kamu menguasainya.</div>
   <div class="btHow"><b class="t">🪙 Gold & item</b>Last-hit minion dan kalahkan musuh untuk dapat gold, beli item lewat tombol 🛒.</div>
@@ -1120,7 +1120,7 @@ function cast(u,i,ang){const k=u.kinds[i-1],m=[0,1,1.4,2.2][i],d=u.atk*m*1.2*(RT
 
 // ---- skill = logic challenge ----
 async function useSkill(i,ang){const u=cu();if(!RT.on||RT.paused||RT.over||u.dead||u.cd[i]>0||RT.qk)return;
-  if(i<3||RT.mp)return quickSkill(i,ang,u); // Skill 1 & 2 = Quick Answer (game TIDAK pause). Ultimate (3) = soal penuh + pause
+  return quickSkill(i,ang,u); // Skill 1, 2, dan Ultimate = Quick Answer (game TIDAK pause)
   RT.paused=true;let tk=RT.pool[i].shift();
   if(!tk){mod('<h3>⚙️ COMPILING SKILL...</h3>');const r=await call('rtq',{diff:i});if(!r){closeM();RT.paused=false;return}tk=r.ticket}
   RT.sk={i:i,tk:tk,u:u,ang:ang};RT.qs=15;
