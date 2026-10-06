@@ -1024,6 +1024,18 @@ function rtBind(){const j=$('#joy'),k=$('#knob');let cx=0,cy=0,R=75,kx=0,ky=0,ra
     b.onpointerup=e=>{if(e.pointerId!==pid)return;pid=null;const a=RT.aim;RT.aim=null;useSkill(i,a?a.a:null)};
     b.onpointercancel=b.onlostpointercapture=e=>{if(e.pointerId===pid){pid=null;RT.aim=null}}});
   $('#arena').oncontextmenu=e=>e.preventDefault()}
+// ---- MULTI-TOUCH: tombol HUD/modal (Shop, jawaban Quick Answer, dll) tetap bisa diketuk saat joystick / tombol lain sedang ditahan ----
+(function(){if(window.__tapFix)return;window.__tapFix=1;
+  const down={};let sup=0;
+  const inGame=()=>{try{return !!(RT&&RT.on)}catch(x){return false}};
+  const tgt=e=>{const t=e.target&&e.target.closest?e.target.closest('button,.opt'):null;return t&&!t.classList.contains('ab')&&t.id!=='joy'&&!t.disabled&&t.getAttribute('onclick')?t:null};
+  document.addEventListener('pointerdown',e=>{if(e.pointerType!=='touch'||!inGame())return;const b=tgt(e);if(b)down[e.pointerId]=b},true);
+  document.addEventListener('pointerup',e=>{const b=down[e.pointerId];delete down[e.pointerId];if(!b||!inGame())return;
+    const el=document.elementFromPoint(e.clientX,e.clientY);if(!el||!(b===el||b.contains(el)))return;
+    sup=performance.now();b.click()},true);
+  document.addEventListener('pointercancel',e=>{delete down[e.pointerId]},true);
+  document.addEventListener('click',e=>{if(e.isTrusted&&performance.now()-sup<700&&e.target.closest&&e.target.closest('button,.opt')){e.stopImmediatePropagation();e.preventDefault()}},true);
+})();
 const KCODE={KeyW:'w',KeyA:'a',KeyS:'s',KeyD:'d',KeyJ:'j',Space:' ',ArrowUp:'arrowup',ArrowDown:'arrowdown',ArrowLeft:'arrowleft',ArrowRight:'arrowright'};
 function rtKD(e){if(!RT.on)return;const k=e.key.toLowerCase(),c=KCODE[e.code];
   if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k))e.preventDefault();
